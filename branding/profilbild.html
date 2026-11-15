@@ -1,0 +1,61 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+:root{--bg:#0d1520;--a:#f2665a;--b:#3cc6b8;--y:#f6b440;--ink:#eef1f5}
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1080px;height:1080px;overflow:hidden;background:var(--bg);font-family:Inter,sans-serif}
+.v{position:absolute;inset:0;display:none;background:radial-gradient(90% 90% at 50% 20%,#18283f 0%,#0d1520 60%,#0a1019 100%)}
+.dots{position:absolute;inset:0;opacity:.45;background-image:radial-gradient(circle,rgba(200,215,235,.2) 1.6px,transparent 2px);background-size:46px 46px}
+svg{position:absolute;inset:0}
+body.v1 #v1,body.v2 #v2,body.v3 #v3{display:block}
+</style></head><body><svg width="0" height="0" style="position:absolute"><defs><clipPath id="bc"><circle r="150"/></clipPath>
+<symbol id="ball" viewBox="-160 -160 320 320" overflow="visible"><g clip-path="url(#bc)"><circle r="150" fill="#f4f6f9"/>
+<g fill="#1b2533"><polygon points="0.0,-52.0 49.5,-16.1 30.6,42.1 -30.6,42.1 -49.5,-16.1"/><polygon points="131.9,-135.6 115.2,-84.1 61.1,-84.1 44.4,-135.6 88.2,-167.4"/><polygon points="169.7,83.6 115.6,83.6 98.9,32.1 142.7,0.4 186.4,32.1"/><polygon points="-27.0,187.2 -43.7,135.8 0.0,104.0 43.7,135.8 27.0,187.2"/><polygon points="-186.4,32.1 -142.7,0.4 -98.9,32.1 -115.6,83.6 -169.7,83.6"/><polygon points="-88.2,-167.4 -44.4,-135.6 -61.1,-84.1 -115.2,-84.1 -131.9,-135.6"/></g>
+<g stroke="#1b2533" stroke-width="8" opacity=".9"><line x1="0.0" y1="-52.0" x2="0.0" y2="-100.0"/><line x1="49.5" y1="-16.1" x2="95.1" y2="-30.9"/><line x1="30.6" y1="42.1" x2="58.8" y2="80.9"/><line x1="-30.6" y1="42.1" x2="-58.8" y2="80.9"/><line x1="-49.5" y1="-16.1" x2="-95.1" y2="-30.9"/></g></g>
+<circle r="150" fill="none" stroke="rgba(0,0,0,.18)" stroke-width="6"/></symbol></defs></svg>
+<!-- V1: Ball mit zwei Flugbahnen (rot = Ecke, türkis = Mitte) -->
+<div class="v" id="v1"><div class="dots"></div>
+<svg viewBox="0 0 1080 1080">
+ <defs><filter id="g"><feGaussianBlur stdDeviation="14"/></filter></defs>
+ <path d="M540 600 C 450 420, 340 340, 260 320" fill="none" stroke="#f2665a" stroke-width="22" stroke-linecap="round" stroke-dasharray="2 46"/>
+ <path d="M540 600 C 555 440, 555 340, 540 250" fill="none" stroke="#3cc6b8" stroke-width="22" stroke-linecap="round" stroke-dasharray="2 46"/>
+ <circle cx="260" cy="320" r="46" fill="none" stroke="#f2665a" stroke-width="12" stroke-dasharray="20 14"/>
+ <circle cx="540" cy="220" r="46" fill="none" stroke="#3cc6b8" stroke-width="12" stroke-dasharray="20 14"/>
+ <circle cx="540" cy="220" r="70" fill="#3cc6b8" opacity=".35" filter="url(#g)"/>
+ <use href="#ball" x="390" y="570" width="300" height="300"/>
+</svg></div>
+
+<!-- V2: Tor mit Ball in der Mitte, rot/türkis geteilt -->
+<div class="v" id="v2"><div class="dots"></div>
+<svg viewBox="0 0 1080 1080">
+ <defs><filter id="g2"><feGaussianBlur stdDeviation="30"/></filter></defs>
+ <rect x="170" y="300" width="370" height="380" fill="#f2665a" opacity=".22"/>
+ <rect x="540" y="300" width="370" height="380" fill="#3cc6b8" opacity=".22"/>
+ <g stroke="rgba(201,210,222,.18)" stroke-width="4">
+  <line x1="245" y1="300" x2="245" y2="680"/><line x1="320" y1="300" x2="320" y2="680"/><line x1="395" y1="300" x2="395" y2="680"/><line x1="470" y1="300" x2="470" y2="680"/>
+  <line x1="610" y1="300" x2="610" y2="680"/><line x1="685" y1="300" x2="685" y2="680"/><line x1="760" y1="300" x2="760" y2="680"/><line x1="835" y1="300" x2="835" y2="680"/>
+  <line x1="170" y1="375" x2="910" y2="375"/><line x1="170" y1="450" x2="910" y2="450"/><line x1="170" y1="525" x2="910" y2="525"/><line x1="170" y1="600" x2="910" y2="600"/></g>
+ <path d="M170 690 V300 H910 V690" fill="none" stroke="#dfe5ee" stroke-width="40" stroke-linejoin="round"/>
+ <rect x="110" y="690" width="860" height="14" rx="7" fill="#dfe5ee" opacity=".4"/>
+ <circle cx="540" cy="490" r="120" fill="#f6b440" opacity=".35" filter="url(#g2)"/>
+ <use href="#ball" x="432" y="382" width="216" height="216"/>
+ <rect x="350" y="790" width="380" height="96" rx="48" fill="#f6b440"/>
+ <text x="540" y="857" text-anchor="middle" font-family="Inter" font-weight="900" font-size="56" fill="#1a1408">9 : 7</text>
+</svg></div>
+
+<!-- V3: Strichfigur-Torwart springt, Ball geht in die Mitte -->
+<div class="v" id="v3"><div class="dots"></div>
+<svg viewBox="0 0 1080 1080">
+ <defs><filter id="g3"><feGaussianBlur stdDeviation="40"/></filter></defs>
+ <circle cx="540" cy="540" r="330" fill="#3cc6b8" opacity=".18" filter="url(#g3)"/>
+ <path d="M150 760 V330 H930 V760" fill="none" stroke="#dfe5ee" stroke-width="34" stroke-linejoin="round"/>
+ <line x1="90" y1="770" x2="990" y2="770" stroke="#3cc6b8" stroke-width="14" stroke-linecap="round"/>
+ <!-- springender Torwart nach rechts -->
+ <g transform="translate(720 700) rotate(62)">
+  <rect x="-24" y="-200" width="48" height="190" rx="24" fill="#8c99ab"/>
+  <rect x="-70" y="-175" width="22" height="110" rx="11" fill="#8c99ab" transform="rotate(-30 -59 -175)"/>
+  <rect x="48" y="-175" width="22" height="110" rx="11" fill="#8c99ab" transform="rotate(30 59 -175)"/>
+  <circle cx="0" cy="-245" r="38" fill="#eef1f5"/>
+ </g>
+ <path d="M540 1010 C 540 860, 540 720, 540 640" fill="none" stroke="#3cc6b8" stroke-width="18" stroke-linecap="round" stroke-dasharray="2 40"/>
+ <use href="#ball" x="447" y="447" width="186" height="186"/>
+</svg></div>
+</body></html>
