@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="de" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="assets/gsap.min.js"></script>
+<script src="timings.js"></script>
+<link rel="stylesheet" href="assets/stil-b.css" />
+<style>
+  /* ---------- Bahnen (Elfmeter) ---------- */
+  .lane { position: absolute; left: 60px; width: 960px; height: 440px; }
+  #laneA { top: 470px; } #laneB { top: 960px; }
+  .lane .frame { position: absolute; inset: 0; border-bottom: 3px solid var(--c); opacity: .9; }
+  .lane .grid { position: absolute; inset: 0; border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+  .lane .label { position: absolute; left: 6px; top: 10px; font: 800 30px var(--font); color: var(--c); letter-spacing: .02em; }
+  .goal { position: absolute; left: 180px; top: 70px; width: 600px; height: 230px;
+          border: 14px solid #c9d2de; border-bottom: none; border-radius: 6px 6px 0 0;
+          background:
+            repeating-linear-gradient(90deg, rgba(201,210,222,.10) 0 2px, transparent 2px 30px),
+            repeating-linear-gradient(0deg, rgba(201,210,222,.10) 0 2px, transparent 2px 30px); }
+  .goalglow { position: absolute; left: 194px; top: 84px; width: 572px; height: 216px; background: var(--c); opacity: 0; filter: blur(30px); }
+  .goalline { position: absolute; left: 120px; top: 300px; width: 720px; height: 3px; background: #c9d2de; opacity: .35; }
+  .spot { position: absolute; left: 474px; top: 400px; width: 12px; height: 12px; border-radius: 50%; background: #c9d2de; opacity: .5; }
+  .target { position: absolute; width: 64px; height: 64px; margin: -32px 0 0 -32px; border-radius: 50%;
+            border: 4px dashed var(--c); opacity: 0; }
+  /* Torwart: Pivot an den Füßen */
+  .keeper { position: absolute; left: 480px; top: 300px; width: 0; height: 0; }
+  .keeper .k { position: absolute; left: -60px; top: -170px; width: 120px; height: 170px; transform-origin: 60px 170px; }
+  .keeper .head { position: absolute; left: 41px; top: 0; width: 38px; height: 38px; border-radius: 50%; background: #eef1f5; }
+  .keeper .body { position: absolute; left: 44px; top: 44px; width: 32px; height: 120px; border-radius: 16px; background: var(--keeper); }
+  .keeper .arm { position: absolute; top: 52px; width: 14px; height: 70px; border-radius: 7px; background: var(--keeper); }
+  .keeper .arm.l { left: 22px; transform: rotate(35deg); } .keeper .arm.r { left: 84px; transform: rotate(-35deg); }
+  .keeper .glove { position: absolute; top: 104px; width: 20px; height: 20px; border-radius: 6px; background: var(--y); }
+  .keeper .glove.l { left: 4px; } .keeper .glove.r { left: 96px; }
+  /* Schütze */
+  .shooter { position: absolute; left: 380px; top: 330px; width: 40px; height: 110px; }
+  .shooter .head { position: absolute; left: 4px; top: 0; width: 32px; height: 32px; border-radius: 50%; background: #eef1f5; }
+  .shooter .body { position: absolute; left: 8px; top: 36px; width: 24px; height: 74px; border-radius: 12px; background: var(--c); }
+  .ball { position: absolute; left: 480px; top: 385px; width: 0; height: 0; }
+  .ball i { position: absolute; left: -19px; top: -19px; width: 38px; height: 38px; border-radius: 50%;
+            background: radial-gradient(circle at 50% 50%, #1b2533 0 6px, transparent 7px),
+                        radial-gradient(circle at 18% 30%, #1b2533 0 4px, transparent 5px),
+                        radial-gradient(circle at 82% 30%, #1b2533 0 4px, transparent 5px),
+                        radial-gradient(circle at 30% 85%, #1b2533 0 4px, transparent 5px),
+                        radial-gradient(circle at 72% 85%, #1b2533 0 4px, transparent 5px), #f4f6f9;
+            box-shadow: 0 0 18px rgba(255,255,255,.25); }
+  .verdict { position: absolute; left: 480px; top: 22px; }
+  .verdict > * { position: absolute; left: 0; top: 0; transform: translateX(-50%); opacity: 0; white-space: nowrap; }
+
+  /* ---------- Endteil ---------- */
+  .bars { position: absolute; left: 90px; width: 900px; top: 600px; }
+  .bar-row { margin-bottom: 70px; }
+  .bar-row .name { font: 800 34px var(--font); color: var(--ink); margin-bottom: 14px; letter-spacing: .02em; }
+  .bar-row .track { position: relative; height: 84px; border-radius: 14px; background: #172234; overflow: hidden; }
+  .bar-row .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 14px; transform-origin: 0 50%; }
+  .bar-row .val { position: absolute; right: 22px; top: 12px; font: 800 52px var(--font); color: var(--ink); }
+  .src { position: absolute; left: 90px; top: 1060px; font: 500 24px var(--font); color: var(--muted); }
+
+  #big { position: absolute; left: 0; top: 520px; width: 1080px; height: 700px; }
+  #big .lane { position: absolute; left: 60px; top: 0; transform-origin: 480px 220px; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="34.009" data-width="1080" data-height="1920" data-sync-total>
+
+  <div id="bg" class="bg"><div class="bg-dots"></div><div class="bg-skyline"></div></div>
+
+  <!-- Titel / Hook -->
+  <div id="title" class="titlebox">
+    <div class="t1"><span class="ka">ECKE</span> <span class="vs">vs</span> <span class="kb">MITTE</span></div>
+    <div class="t2">WO TRIFFST DU ÖFTER?</div>
+  </div>
+  <div id="setupPills" class="pillrow" style="top:150px">
+    <span id="p10" class="pill py">10 SCHÜSSE</span>
+    <span id="pTW" class="pill pw">GLEICHER TORWART</span>
+  </div>
+
+  <!-- HUD -->
+  <div id="hud">
+    <div id="shotNo" class="timer"></div>
+    <div class="cards">
+      <div class="card ca"><div class="cname">ECKE</div><div class="clabel">TORE</div><div class="cnum" id="numA"></div><div class="cstat" id="statA"></div></div>
+      <div class="card cb"><div class="cname">MITTE</div><div class="clabel">TORE</div><div class="cnum" id="numB"></div><div class="cstat" id="statB"></div></div>
+    </div>
+  </div>
+
+  <div id="lanes"></div>
+  <div id="trapPill" class="pill pa" style="position:absolute;left:640px;top:500px;font-size:30px">SICHERER?</div>
+  <div id="ffPill" class="pill pw" style="position:absolute;left:540px;top:418px;transform:translateX(-50%);font-size:22px;padding:6px 16px">▶▶ SCHNELLDURCHLAUF</div>
+
+  <!-- Endstand -->
+  <div id="dim" class="dim"></div>
+  <div id="endcard" class="panel" style="left:150px;top:640px;width:780px">
+    <div class="ptitle">ENDSTAND</div>
+    <div class="prow" id="rowB"><span class="kb">MITTE</span><span>9 / 10</span></div>
+    <div class="prow" id="rowA"><span class="ka">ECKE</span><span>7 / 10</span></div>
+    <div class="psep"></div>
+    <div class="prow small" id="rowD"><span>DIFFERENZ</span><span class="ky">+2 TORE</span></div>
+    <div class="pwin kb" id="win">MITTE GEWINNT</div>
+  </div>
+
+  <!-- Warum -->
+  <div id="why">
+    <div class="section-title">WARUM?</div>
+    <div class="bars">
+      <div class="bar-row"><div class="name">TORWART SPRINGT</div><div class="track"><div class="fill" id="fill1" style="width:94%;background:#8c99ab"></div><div class="val" id="val1">94 %</div></div></div>
+      <div class="bar-row"><div class="name ky">BLEIBT STEHEN</div><div class="track"><div class="fill" id="fill2" style="width:6%;background:var(--y)"></div><div class="val" id="val2">6 %</div></div></div>
+    </div>
+    <div class="src">Quelle: Bar-Eli et al. (2007), 286 Profi-Elfmeter</div>
+  </div>
+
+  <!-- Großes Tor -->
+  <div id="big"></div>
+  <div id="emptyPill" class="pill pb" style="position:absolute;left:540px;top:470px;transform:translateX(-50%);font-size:40px">LEERES TOR</div>
+  <div id="stat71" class="pill pa" style="position:absolute;left:540px;top:400px;transform:translateX(-50%);font-size:30px">71 % ZIELEN IN DIE ECKE</div>
+  <div id="peinlich" class="bigword" style="top:1130px">PEINLICH.</div>
+
+  <div id="caps"></div>
+
+  <audio id="vo" class="clip" src="assets/voice.wav" data-start="0" data-duration="34.009" data-volume="1" data-sync-total></audio>
+</div>
+
+<script>
+(() => {
+  const S = window.SEG, CAPS = window.CAPS;
+  const $ = (s) => document.querySelector(s);
+  const tl = gsap.timeline({ paused: true });
+
+  // ---------- Helfer ----------
+  const capAt = (seg, word, fallback = 0) => {
+    const s = S[seg];
+    const c = CAPS.find(c => c.t0 >= s.start - 0.01 && c.t0 <= s.end && c.html.replace(/<[^>]+>/g, "").toLowerCase().includes(word.toLowerCase()));
+    return c ? c.t0 : s.start + fallback;
+  };
+  const show = (el, t, from = { opacity: 0, y: 20, scale: .9 }, d = .3) =>
+    tl.fromTo(el, from, { opacity: 1, y: 0, scale: 1, duration: d, ease: "back.out(2)" }, t);
+  const hide = (el, t, d = .25) => tl.to(el, { opacity: 0, duration: d, ease: "power2.in" }, t);
+  const stack = (el, values) => values.map(v => { const s = document.createElement("span"); s.innerHTML = v; el.appendChild(s); return s; });
+  const swap = (spans, i, t) => spans.forEach((s, j) => tl.set(s, { opacity: j === i ? 1 : 0 }, t));
+
+  // ---------- Untertitel ----------
+  CAPS.forEach(c => {
+    const d = document.createElement("div"); d.className = "cap"; d.innerHTML = c.html; $("#caps").appendChild(d);
+    tl.set(d, { opacity: 0 }, 0);
+    tl.fromTo(d, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .12 }, c.t0);
+    tl.set(d, { opacity: 0 }, c.t1);
+  });
+
+  // ---------- Bahnen bauen ----------
+  function buildLane(id, cls, label, parent) {
+    const l = document.createElement("div"); l.className = "lane " + cls; l.id = id;
+    l.innerHTML = `<div class="grid"></div><div class="frame"></div><div class="label">${label}</div>
+      <div class="goalglow"></div><div class="goal"></div><div class="goalline"></div><div class="spot"></div>
+      <div class="target t0"></div><div class="target t1"></div>
+      <div class="keeper"><div class="k"><div class="arm l"></div><div class="arm r"></div><div class="glove l"></div><div class="glove r"></div><div class="body"></div><div class="head"></div></div></div>
+      <div class="shooter"><div class="head"></div><div class="body"></div></div>
+      <div class="ball"><i></i></div>
+      <div class="verdict"><span class="pill vtor">TOR</span><span class="pill vsave">GEHALTEN</span></div>`;
+    parent.appendChild(l); return l;
+  }
+  const A = buildLane("laneA", "la", "ECKE", $("#lanes"));
+  const B = buildLane("laneB", "lb", "MITTE", $("#lanes"));
+  const q = (lane, s) => lane.querySelector(s);
+
+  // Zielpunkte relativ zur Bahn (Ball startet bei 480/385)
+  const TGT = { L: { x: -225, y: -250 }, R: { x: 225, y: -250 }, C: { x: 0, y: -175 } };
+  // Ziel-Markierungen
+  [[A, "t0", 255, 135], [A, "t1", 705, 135], [B, "t0", 480, 210]].forEach(([l, c, x, y]) => gsap.set(q(l, "." + c), { left: x, top: y }));
+  gsap.set(q(B, ".t1"), { display: "none" });
+
+  // Schuss-Animation. dir: L/R/C, dive: L/R/S, save: bool
+  function shot(lane, t, dir, dive, save, speed = 1) {
+    const k = q(lane, ".k"), b = q(lane, ".ball"), sh = q(lane, ".shooter");
+    const d = (x) => x * speed;
+    const tg = TGT[dir];
+    tl.set(b, { x: 0, y: 0, scale: 1, opacity: 1 }, t);
+    tl.set(k, { x: 0, y: 0, rotation: 0 }, t);
+    tl.to(sh, { x: 40, y: -20, duration: d(.12), ease: "power2.out" }, t);
+    tl.to(sh, { x: 0, y: 0, duration: d(.2) }, t + d(.14));
+    if (dive !== "S") {
+      const s = dive === "L" ? -1 : 1;
+      tl.to(k, { x: s * 150, y: -40, rotation: s * 72, duration: d(.32), ease: "power2.out" }, t + d(.06));
+    } else {
+      tl.to(k, { y: -12, duration: d(.15), yoyo: true, repeat: 1 }, t + d(.06));
+    }
+    if (save) {
+      const stop = dive === "S" ? { x: 0, y: -195 } : { x: (dive === "L" ? -1 : 1) * 190, y: -215 };
+      tl.to(b, { x: stop.x, y: stop.y, scale: .75, duration: d(.28), ease: "power1.in" }, t + d(.1));
+      tl.to(b, { x: stop.x * 1.25 + 30, y: stop.y + 120, scale: .8, opacity: 0, duration: d(.3), ease: "power2.out" }, t + d(.38));
+    } else {
+      tl.to(b, { x: tg.x, y: tg.y, scale: .72, duration: d(.3), ease: "power1.in" }, t + d(.1));
+      tl.fromTo(q(lane, ".goalglow"), { opacity: .45 }, { opacity: 0, duration: d(.5), immediateRender: false }, t + d(.4));
+    }
+    return t + d(.4); // Zeitpunkt des Ergebnisses
+  }
+  function verdict(lane, goal, t, dur = .8) {
+    const el = q(lane, goal ? ".vtor" : ".vsave");
+    tl.fromTo(el, { opacity: 0, scale: .6 }, { opacity: 1, scale: 1, duration: .18, ease: "back.out(3)" }, t);
+    tl.to(el, { opacity: 0, duration: .15 }, t + dur);
+  }
+
+  // ---------- Szene 1: Hook ----------
+  gsap.set(["#hud", "#trapPill", "#ffPill", "#dim", "#endcard", "#why", "#emptyPill", "#stat71", "#peinlich", "#setupPills .pill", ".target"], { opacity: 0 });
+  gsap.set(["#rowA", "#rowB", "#rowD", "#win"], { opacity: 0 });
+  show("#title", 0.05, { opacity: 0, y: -30, scale: .95 }, .35);
+  tl.from("#laneA", { opacity: 0, x: -80, duration: .4, ease: "power3.out" }, 0.35);
+  tl.from("#laneB", { opacity: 0, x: 80, duration: .4, ease: "power3.out" }, 0.5);
+  hide("#title", S.setup.start - 0.05);
+
+  // ---------- Szene 2: Setup ----------
+  show("#p10", capAt("setup", "Zehn"));
+  show("#pTW", capAt("setup", "Torwart"));
+  tl.fromTo(q(A, ".k"), { scale: 1 }, { scale: 1.15, duration: .15, yoyo: true, repeat: 1 }, capAt("setup", "Torwart"));
+  tl.fromTo(q(B, ".k"), { scale: 1 }, { scale: 1.15, duration: .15, yoyo: true, repeat: 1 }, capAt("setup", "Torwart"));
+  const tRot = capAt("setup", "Rot"), tTur = capAt("setup", "Türkis");
+  tl.to([q(A, ".t0"), q(A, ".t1")], { opacity: 1, duration: .25 }, tRot);
+  tl.fromTo(q(A, ".label"), { scale: 1 }, { scale: 1.35, duration: .2, yoyo: true, repeat: 1, transformOrigin: "0 50%" }, tRot);
+  tl.to(q(B, ".t0"), { opacity: 1, duration: .25 }, tTur);
+  tl.fromTo(q(B, ".label"), { scale: 1 }, { scale: 1.35, duration: .2, yoyo: true, repeat: 1, transformOrigin: "0 50%" }, tTur);
+
+  // ---------- Szene 3: Falle ----------
+  show("#trapPill", capAt("trap", "sicherer"), { opacity: 0, scale: .5, y: 0 });
+  hide("#setupPills .pill", S.shot1.start - .1);
+  hide("#trapPill", S.shot1.start - .1);
+  tl.to(".target", { opacity: 0, duration: .2 }, S.shot1.start - .1);
+
+  // ---------- HUD ----------
+  const shotSpans = stack($("#shotNo"), Array.from({ length: 11 }, (_, i) => `SCHUSS <b>${i}</b><span class="of"> / 10</span>`));
+  const numA = stack($("#numA"), Array.from({ length: 11 }, (_, i) => i));
+  const numB = stack($("#numB"), Array.from({ length: 11 }, (_, i) => i));
+  const stA = stack($("#statA"), ["", '<span class="spill tor">TOR</span>', '<span class="spill save">GEHALTEN</span>', '<span class="spill fin">7 / 10</span>']);
+  const stB = stack($("#statB"), ["", '<span class="spill tor">TOR</span>', '<span class="spill save">GEHALTEN</span>', '<span class="spill fin">9 / 10</span>']);
+  [shotSpans, numA, numB, stA, stB].forEach(a => swap(a, 0, 0));
+  show("#hud", S.shot1.start, { opacity: 0, y: -30, scale: 1 }, .3);
+
+  // ---------- Szene 4: Schuss 1 (langsam) ----------
+  const tKick = capAt("shot1", "Torwart", 0.8) - 0.15;
+  swap(shotSpans, 1, S.shot1.start);
+  shot(A, tKick, "L", "L", true, 1.6);
+  shot(B, tKick, "C", "L", false, 1.6);
+  const tEcke = capAt("shot1", "Ecke:"), tMitte = capAt("shot1", "Mitte:");
+  verdict(A, false, tEcke, 1.5); swap(stA, 2, tEcke);
+  verdict(B, true, tMitte, 1.0); swap(stB, 1, tMitte); swap(numB, 1, tMitte);
+
+  // ---------- Szene 5: Schüsse 2–10 ----------
+  const dirsA = ["R", "R", "L", "R", "L", "L", "R", "L", "R"];
+  const dive  = ["L", "L", "L", "L", "R", "R", "R", "R", "L"];
+  let gA = 0, gB = 1;
+  const t0 = S.rest.start + 0.25, t1 = S.result.start - 0.35;
+  const step = (t1 - t0) / 9;
+  show("#ffPill", t0 - .1, { opacity: 0, y: 0, scale: .8 }, .2);
+  for (let i = 0; i < 9; i++) {
+    const t = t0 + i * step, n = i + 2;
+    swap(shotSpans, n, t);
+    const saveA = dirsA[i] === dive[i];
+    const keeperB = n === 6 ? "S" : dive[i];
+    const saveB = keeperB === "S";
+    const tr = shot(A, t, dirsA[i], dive[i], saveA, step / .55);
+    shot(B, t, "C", keeperB, saveB, step / .55);
+    if (!saveA) gA++; if (!saveB) gB++;
+    swap(numA, gA, tr); swap(stA, saveA ? 2 : 1, tr);
+    swap(numB, gB, tr); swap(stB, saveB ? 2 : 1, tr);
+    verdict(A, !saveA, tr, step * .6); verdict(B, !saveB, tr, step * .6);
+  }
+  hide("#ffPill", t1);
+  swap(stA, 3, t1); swap(stB, 3, t1);
+
+  // ---------- Szene 6: Endstand ----------
+  const tR = S.result.start;
+  tl.to("#dim", { opacity: .82, duration: .3 }, tR);
+  show("#endcard", tR + .05, { opacity: 0, y: 40, scale: .96 }, .35);
+  show("#rowA", capAt("result", "Ecke"), { opacity: 0, y: 10, scale: 1 }, .2);
+  show("#rowB", capAt("result", "neun"), { opacity: 0, y: 10, scale: 1 }, .2);
+  show("#rowD", capAt("result", "neun") + .45, { opacity: 0, y: 10, scale: 1 }, .2);
+  show("#win", capAt("result", "neun") + .7, { opacity: 0, scale: .6, y: 0 }, .35);
+  tl.fromTo("#endcard .pwin", { textShadow: "0 0 0px rgba(60,198,184,0)" }, { textShadow: "0 0 40px rgba(60,198,184,.9)", duration: .4 }, capAt("result", "neun") + .7);
+
+  // ---------- Szene 7: Warum ----------
+  const tW = S.why.start;
+  hide(["#endcard", "#hud", "#lanes"], tW - .05, .2);
+  tl.to("#dim", { opacity: 0, duration: .3 }, tW);
+  tl.set("#why", { opacity: 1 }, tW);
+  tl.from("#why .section-title", { opacity: 0, y: -30, duration: .3, ease: "back.out(2)" }, tW);
+  tl.from("#why .bar-row", { opacity: 0, y: 30, duration: .3, stagger: .12 }, tW + .25);
+  tl.fromTo("#fill1", { scaleX: 0 }, { scaleX: 1, duration: .9, ease: "power3.out" }, capAt("why", "springen"));
+  tl.fromTo("#val1", { opacity: 0 }, { opacity: 1, duration: .2 }, capAt("why", "springen") + .5);
+  tl.fromTo("#fill2", { scaleX: 0 }, { scaleX: 1, duration: .5, ease: "power3.out" }, capAt("why", "sechs"));
+  tl.fromTo("#val2", { opacity: 0, scale: .6 }, { opacity: 1, scale: 1, duration: .25, ease: "back.out(3)" }, capAt("why", "sechs"));
+  tl.from(".src", { opacity: 0, duration: .3 }, capAt("why", "sechs") + .3);
+  // Reihen-Startzustand für das "Warum"-Panel vor seinem Einsatz
+  gsap.set(["#fill1", "#fill2"], { scaleX: 0 });
+
+  // ---------- Szene 8: Leeres Tor ----------
+  const BIG = buildLane("laneBig", "lb", "", $("#big"));
+  gsap.set(BIG, { scale: 1.08, left: 60, top: 0 });
+  gsap.set("#big", { opacity: 0 });
+  const tE = S.empty.start;
+  hide("#why", tE - .05, .2);
+  tl.to("#big", { opacity: 1, duration: .3 }, tE);
+  const tEmpty = shot(BIG, capAt("empty", "schießt") + .1, "C", "R", false, 1.8);
+  show("#emptyPill", capAt("empty", "leeres", 2), { opacity: 0, scale: .5, y: 0 }, .3);
+
+  // ---------- Szene 9: Pointe ----------
+  const tP = S.punch.start;
+  hide("#emptyPill", tP - .05, .2);
+  show("#stat71", capAt("punch", "meisten"), { opacity: 0, scale: .6, y: 0 }, .3);
+  hide("#stat71", capAt("punch", "Denn") - .05, .2);
+  tl.set(q(BIG, ".k"), { x: 0, y: 0, rotation: 0 }, capAt("punch", "Denn") - .3);
+  tl.set(q(BIG, ".ball"), { x: 0, y: 0, scale: 1, opacity: 1 }, capAt("punch", "Denn") - .3);
+  // Torwart bleibt stehen, Ball fliegt ihm in die Arme
+  const tS = capAt("punch", "Mitte") - .1;
+  const k = q(BIG, ".k"), b = q(BIG, ".ball");
+  tl.to(q(BIG, ".shooter"), { x: 40, y: -20, duration: .15 }, tS);
+  tl.to(q(BIG, ".shooter"), { x: 0, y: 0, duration: .25 }, tS + .18);
+  tl.to(b, { x: 0, y: -105, scale: .78, duration: .45, ease: "power1.in" }, tS + .12);
+  tl.to(k, { y: -6, duration: .12, yoyo: true, repeat: 1 }, tS + .5);
+  tl.to(q(BIG, ".vsave"), { opacity: 1, duration: .15 }, tS + .6);
+  tl.to(q(BIG, ".vsave"), { opacity: 0, duration: .15 }, capAt("punch", "peinlich") - .1);
+  tl.fromTo("#peinlich", { opacity: 0, scale: 1.8 }, { opacity: 1, scale: 1, duration: .3, ease: "back.out(2.5)" }, capAt("punch", "peinlich"));
+  tl.to("#big", { opacity: .55, duration: .3 }, capAt("punch", "peinlich"));
+
+  tl.set({}, {}, window.TOTAL);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+})();
+</script>
+</body>
+</html>
