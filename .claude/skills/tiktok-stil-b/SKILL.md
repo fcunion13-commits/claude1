@@ -24,7 +24,7 @@ Länge 30–60 s (Standard: ~30 s ≈ 75–90 Wörter). Zwei Seiten A gegen B, d
 | 7 | `why` | „Aber warum?“ – echter Mechanismus, echte Zahl mit Quelle | gelber Abschnittstitel + Balken |
 | 8 | Pointe | ein knackiger Schlusssatz | großes gelbes Wort oder Panel „UNTERM STRICH“ |
 
-Sprache: Präsens, „du“, Sätze mit 3–10 Wörtern, Zahlen **als Wörter** schreiben (Piper liest sie dann richtig).
+Sprache: begeistert und energisch, viele Ausrufezeichen („Zehn Schüsse! Gleicher Torwart!“). Präsens, „du“, Sätze mit 3–10 Wörtern, Zahlen **als Wörter** schreiben (Piper liest sie dann richtig).
 Fakten müssen stimmen. Simulierte Zahlen als Simulation kennzeichnen, echte Zahlen mit Quelle (kleine graue Zeile).
 Keine fremden Handles oder Wasserzeichen übernehmen. Das TikTok-Outro mit der Suchleiste fügt TikTok beim Download selbst an, deshalb wird es **nicht** gebaut.
 
@@ -66,7 +66,9 @@ Pro Video:
    - Bei `fromTo` mitten in der Timeline `immediateRender: false` setzen, sonst springt der Startzustand schon an den Anfang des Videos.
    - Unterstützte Eigenschaften: opacity, x, y, scale, scaleX/Y, rotation, width, height. Balken wachsen deshalb über `scaleX` mit `transform-origin: 0 50%`.
 5. Prüfen: `npx hyperframes lint .` muss 0 Fehler zeigen. Dann `npx hyperframes snapshot --at 1,5,10,…` und das Kontaktblatt ansehen (Überlappungen, Lesbarkeit, Timing).
-6. Optional die Stimme kontrollieren: `voice.wav` mit faster-whisper (`language='de'`) transkribieren. Ein falsch gelesenes Wort im Segment über `"say"` mit anderer Schreibweise korrigieren.
+   **Stimme (Standard):** Thorsten (`de_DE-thorsten-high`) mit `"noise_scale": 0.85, "noise_w": 1.0, "pitch": 1.5, "length_scale": 0.82`. Das klingt begeistert und gleicht dem ersten Video. Diese Werte in jede script.json übernehmen.
+   Piper klingt bei jedem Lauf leicht anders. Ist ein Wort verwaschen, das Skript einfach noch einmal laufen lassen.
+6. Die Stimme immer kontrollieren: `voice.wav` mit faster-whisper (`language='de'`) transkribieren. Ein falsch gelesenes Wort im Segment über `"say"` mit anderer Schreibweise korrigieren.
 7. Rendern: `npx hyperframes render -q delivery -o <name>.mp4` (dauert ~1 min für 30 s).
 8. Committen und pushen: Projektordner plus MP4. `.tts/` und `.hyperframes/` sind ignoriert.
 

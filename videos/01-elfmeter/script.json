@@ -1,21 +1,68 @@
 {
   "lead_in": 0.25,
   "tail": 1.0,
-  "length_scale": 0.86,
+  "length_scale": 0.82,
   "colors": {
-    "ecke": "a", "rot": "a",
-    "mitte": "b", "türkis": "b",
-    "zehn": "y", "sieben": "y", "neun": "y", "sechs": "y", "prozent": "y", "peinlich": "y"
+    "ecke": "a",
+    "rot": "a",
+    "mitte": "b",
+    "türkis": "b",
+    "zehn": "y",
+    "sieben": "y",
+    "neun": "y",
+    "sechs": "y",
+    "prozent": "y",
+    "peinlich": "y"
   },
   "segments": [
-    {"id": "hook",   "text": "Elfmeter. Ecke oder Mitte? Wo triffst du öfter?", "pause": 0.3},
-    {"id": "setup",  "text": "Zehn Schüsse. Gleicher Torwart. Rot schießt in die Ecke, Türkis genau in die Mitte.", "pause": 0.2},
-    {"id": "trap",   "text": "Klar, die Ecke ist sicherer, oder?", "pause": 0.25},
-    {"id": "shot1",  "text": "Schuss eins. Der Torwart springt. Ecke: gehalten. Mitte: Tor.", "pause": 0.2},
-    {"id": "rest",   "text": "Und so geht es weiter.", "pause": 2.6},
-    {"id": "result", "text": "Nach zehn Schüssen: Ecke sieben Tore. Mitte neun.", "pause": 0.3},
-    {"id": "why",    "text": "Aber warum? Torhüter springen fast immer. Nur sechs Prozent bleiben stehen.", "pause": 0.2},
-    {"id": "empty",  "text": "Wer in die Mitte schießt, trifft also meistens ein leeres Tor.", "pause": 0.35},
-    {"id": "punch",  "text": "Trotzdem zielen die meisten in die Ecke. Denn in der Mitte gehalten, das sieht einfach peinlich aus.", "pause": 0.1}
-  ]
+    {
+      "id": "hook",
+      "text": "Elfmeter! Ecke oder Mitte? Wo triffst du öfter?",
+      "pause": 0.3,
+      "say": "Elf-Meter! Ecke oder Mitte? Wo triffst du öfter?"
+    },
+    {
+      "id": "setup",
+      "text": "Zehn Schüsse! Gleicher Torwart! Rot schießt in die Ecke, Türkis genau in die Mitte!",
+      "pause": 0.2
+    },
+    {
+      "id": "trap",
+      "text": "Klar, die Ecke ist sicherer, oder?",
+      "pause": 0.25
+    },
+    {
+      "id": "shot1",
+      "text": "Schuss eins! Der Torwart springt! Ecke: gehalten! Mitte: Tor!",
+      "pause": 0.2
+    },
+    {
+      "id": "rest",
+      "text": "Und so geht es weiter!",
+      "pause": 2.6
+    },
+    {
+      "id": "result",
+      "text": "Nach zehn Schüssen: Ecke sieben Tore! Mitte neun!",
+      "pause": 0.3
+    },
+    {
+      "id": "why",
+      "text": "Aber warum? Torhüter springen fast immer. Nur sechs Prozent bleiben stehen.",
+      "pause": 0.2
+    },
+    {
+      "id": "empty",
+      "text": "Wer in die Mitte schießt, trifft also meistens ein leeres Tor!",
+      "pause": 0.35
+    },
+    {
+      "id": "punch",
+      "text": "Trotzdem zielen die meisten in die Ecke. Denn in der Mitte gehalten, das sieht einfach peinlich aus!",
+      "pause": 0.1
+    }
+  ],
+  "noise_scale": 0.85,
+  "noise_w": 1.0,
+  "pitch": 1.5
 }

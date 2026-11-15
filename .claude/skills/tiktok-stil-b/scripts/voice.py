@@ -12,6 +12,10 @@ script.json:
   "lead_in": 0.3,                 # Stille am Anfang
   "tail": 1.2,                    # Stille am Ende
   "length_scale": 0.95,           # <1 = schneller sprechen
+  "noise_scale": 0.85,            # mehr = lebendigere Betonung (Piper-Standard 0.667)
+  "noise_w": 1.0,                 # mehr = lebendigerer Sprechrhythmus (Standard 0.8)
+  "pitch": 1.5,                   # Halbtöne höher = begeisterter klingend (auch pro Segment möglich)
+  "master": true,                 # EQ + Kompressor + Lautheit -14 LUFS
   "colors": {"ecke": "a", "mitte": "b", "sieben": "y"},   # a=Seite A (rot), b=Seite B (türkis), y=gelb
   "segments": [ {"id": "hook", "text": "…", "pause": 0.25, "say": "optional abweichende Aussprache"} ]
 }
@@ -64,8 +68,16 @@ def word_html(w):
 for seg in cfg["segments"]:
     wav = os.path.join(tmp, seg["id"] + ".wav")
     subprocess.run([sys.executable, "-m", "piper", "-m", voice, "-f", wav,
-                    "--length-scale", str(seg.get("length_scale", cfg.get("length_scale", 0.95)))],
+                    "--length-scale", str(seg.get("length_scale", cfg.get("length_scale", 0.95))),
+                    "--noise-scale", str(cfg.get("noise_scale", 0.667)),
+                    "--noise-w-scale", str(cfg.get("noise_w", 0.8))],
                    input=seg.get("say", seg["text"]).encode(), check=True, capture_output=True)
+    pitch = seg.get("pitch", cfg.get("pitch", 0))
+    if pitch:
+        # Tonhöhe in Halbtönen anheben, Länge bleibt gleich
+        subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", wav, "-af", f"rubberband=pitch={2 ** (pitch / 12):.5f}",
+                        wav + ".p.wav"], check=True)
+        os.replace(wav + ".p.wav", wav)
     with wave.open(wav) as w:
         if RATE is None:
             RATE = w.getframerate()
@@ -95,6 +107,14 @@ out = os.path.join(proj, "assets", "voice.wav")
 with wave.open(out, "wb") as w:
     w.setnchannels(1); w.setsampwidth(2); w.setframerate(RATE)
     w.writeframes(b"".join(frames))
+
+# Mastering: präsent und druckvoll wie typische TikTok-Voiceovers, Länge unverändert
+if cfg.get("master", True):
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", out, "-af",
+                    "highpass=f=80,equalizer=f=3200:t=q:w=1.2:g=3,equalizer=f=180:t=q:w=1:g=1.5,"
+                    "acompressor=threshold=-20dB:ratio=3:attack=5:release=60:makeup=2,loudnorm=I=-14:TP=-1.5",
+                    "-ar", str(RATE), out + ".m.wav"], check=True)
+    os.replace(out + ".m.wav", out)
 
 with open(os.path.join(proj, "timings.js"), "w", encoding="utf-8") as f:
     f.write("// automatisch erzeugt von voice.py – nicht von Hand ändern\n")
