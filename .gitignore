@@ -4,3 +4,4 @@ node_modules/
 work-*/
 .*.hf-transaction-*/
 branding/en/avatar.bundle.js
+branding/en/avatar2.bundle.js
