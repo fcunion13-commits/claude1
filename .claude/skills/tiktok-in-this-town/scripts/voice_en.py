@@ -25,9 +25,9 @@ t = cfg.get("lead_in", 0.3)
 chunks.append(np.zeros(int(RATE * t), np.int16))
 for seg in cfg["segments"]:
     wav = os.path.join(tmp, seg["id"] + ".wav")
-    key = json.dumps([seg.get("say", seg["text"]), cfg.get("voice"), cfg.get("speed")])
+    key = json.dumps([seg.get("say", seg["text"]), seg.get("voice", cfg.get("voice")), seg.get("speed", cfg.get("speed"))])
     if not (os.path.exists(wav) and open(wav + ".key").read() == key if os.path.exists(wav + ".key") else False):
-        subprocess.run([hf, "tts", seg.get("say", seg["text"]), "-v", cfg.get("voice", "am_michael"),
+        subprocess.run([hf, "tts", seg.get("say", seg["text"]), "-v", seg.get("voice", cfg.get("voice", "am_michael")),
                         "-s", str(seg.get("speed", cfg.get("speed", 1.0))), "-o", wav], check=True, capture_output=True)
         open(wav + ".key", "w").write(key)
     with wave.open(wav) as w:

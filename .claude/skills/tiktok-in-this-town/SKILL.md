@@ -51,3 +51,12 @@ Per video:
 Framing tips:
 - Portrait has a narrow horizontal view. Keep important things within ±1.5 m of the look-at point at 6 m distance.
 - Keep screen text at ≤ 120 px on a 4.6 m × 260 px/m canvas.
+
+## Learnings from the channel (apply to every video)
+- "The Number": 2.9K views in <4 h, 27 % watched the full 77 s, 5 % likes, but only 1 comment and 5 follows. The story works, but the ending gave no reason to comment or follow. Every video now ends with:
+  1. a **question to the viewer**, spoken as the last segment and shown big on screen (`.endq`), e.g. "Would YOU want to be the only liar? 👇"
+  2. a **"Follow for the next town 🏘️"** pill (`.follow`), shown after the question.
+- **Speech bubbles are screen-space HTML (`.sb l|r|c`, optional `red`)**, not 3D sprites. 3D sprites get cut off at the screen edges in portrait. Each bubble shows the speaker (`<small>LILY</small>`). Keep bubble text ≤ ~20 characters.
+- A second voice is fine for one key line (segment `"voice": "af_heart"`); `voice_en.py` supports per-segment `voice` and `speed`.
+- Music sections per story go in `music.json` (mystery → hope → dark → end), then run `scripts/music.py`.
+- First-person hooks ("…except me") are strong: an immediate conflict and a character the viewer identifies with.

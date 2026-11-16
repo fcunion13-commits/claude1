@@ -1,0 +1,19 @@
+{
+  "voice": "am_michael",
+  "speed": 1.08,
+  "lead_in": 0.2,
+  "tail": 1.6,
+  "segments": [
+    {"id": "hook",    "text": "In this town, nobody can lie. Except me.", "pause": 0.4},
+    {"id": "rule",    "text": "If you try, the truth just comes out. Ask a waiter how the fish is, and he'll tell you it's three days old.", "pause": 0.3},
+    {"id": "eight",   "text": "I found out when I was eight. My mom asked who broke the window. I pointed at my brother, and everyone believed me.", "pause": 0.3},
+    {"id": "use",     "text": "From that day on, I lied about everything. I never did my homework. I never lost a game.", "pause": 0.25},
+    {"id": "rich",    "text": "And by the time I grew up, I was the richest man in town. Not because I was smart, but because I was the only one who could say: trust me.", "pause": 0.35},
+    {"id": "lily",    "text": "Then I met Lily. She was the only person I never wanted to lie to.", "pause": 0.25},
+    {"id": "ask",     "text": "One night, I asked her: do you love me? She said yes. And in this town, that meant it was true.", "pause": 0.35},
+    {"id": "wedding", "text": "On our wedding day, right before the kiss, Lily leaned in and whispered:", "pause": 0.5},
+    {"id": "twist",   "text": "You know... I can lie too.", "voice": "af_heart", "speed": 0.92, "pause": 0.8},
+    {"id": "end",     "text": "Twenty years later, I still don't know if she meant it. Or if that was the lie.", "pause": 0.5},
+    {"id": "cta",     "text": "Would you want to be the only one who can lie?", "pause": 0.1}
+  ]
+}
