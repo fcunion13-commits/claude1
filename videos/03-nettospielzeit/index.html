@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="de" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="assets/gsap.min.js"></script>
+<script src="timings.js"></script>
+<link rel="stylesheet" href="assets/stil-b.css" />
+<style>
+  /* Spielfeld */
+  #pitch { position: absolute; left: 80px; top: 480px; width: 920px; height: 540px; border: 4px solid #2f4a5e; border-radius: 10px;
+           background: repeating-linear-gradient(90deg, rgba(60,198,184,.035) 0 92px, transparent 92px 184px), #0f1b28; }
+  #pitch .l { position: absolute; border: 4px solid #2f4a5e; }
+  #pitch .mid { left: 456px; top: 0; bottom: 0; width: 0; border-width: 0 0 0 4px; }
+  #pitch .circ { left: 380px; top: 190px; width: 160px; height: 160px; border-radius: 50%; }
+  #pitch .boxL { left: -4px; top: 130px; width: 150px; height: 280px; border-left: none; }
+  #pitch .boxR { right: -4px; top: 130px; width: 150px; height: 280px; border-right: none; }
+  #pitch .goalL { left: -18px; top: 225px; width: 14px; height: 90px; border-color: #c9d2de; border-right: none; }
+  #pitch .goalR { right: -18px; top: 225px; width: 14px; height: 90px; border-color: #c9d2de; border-left: none; }
+  #ball { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+  #ball i { position: absolute; left: -22px; top: -22px; width: 44px; height: 44px; border-radius: 50%;
+            background: radial-gradient(circle at 50% 50%, #1b2533 0 7px, transparent 8px),
+                        radial-gradient(circle at 18% 30%, #1b2533 0 5px, transparent 6px),
+                        radial-gradient(circle at 82% 30%, #1b2533 0 5px, transparent 6px),
+                        radial-gradient(circle at 30% 85%, #1b2533 0 5px, transparent 6px),
+                        radial-gradient(circle at 72% 85%, #1b2533 0 5px, transparent 6px), #f4f6f9;
+            box-shadow: 0 0 26px rgba(60,198,184,.55); }
+  #ballring { position: absolute; left: -40px; top: -40px; width: 80px; height: 80px; border-radius: 50%; border: 5px solid var(--b); opacity: .0; }
+  #event { position: absolute; left: 540px; top: 455px; transform: translateX(-50%); opacity: 0; font-size: 36px; }
+  #state { position: absolute; left: 540px; top: 1040px; transform: translateX(-50%); }
+
+  /* Zeitleisten */
+  .tl { position: absolute; left: 80px; width: 920px; }
+  .tl .name { font: 900 26px var(--font); letter-spacing: .04em; margin-bottom: 10px; }
+  .tl .track { position: relative; height: 46px; border-radius: 10px; background: #152030; overflow: hidden; }
+  .tl .fill { position: absolute; left: 0; top: 0; bottom: 0; width: 100%; transform-origin: 0 50%; border-radius: 10px; }
+  .seg { position: absolute; top: 0; bottom: 0; background: var(--b); }
+  .cover { position: absolute; top: 0; bottom: 0; right: 0; background: #152030; }
+  #tlA { top: 1110px; } #tlB { top: 1215px; }
+  .mark90 { position: absolute; top: -6px; bottom: -6px; width: 4px; background: var(--y); }
+
+  .prow.big { font-size: 70px; white-space: nowrap; }
+  #paycard .prow.big { font-size: 64px; }
+  .prow .ky { color: var(--y); }
+  .src { position: absolute; left: 80px; right: 80px; top: 1385px; text-align: center; font: 500 24px var(--font); color: var(--muted); }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="37.429" data-width="1080" data-height="1920" data-sync-total>
+  <div id="bg" class="bg"><div class="bg-dots"></div><div class="bg-skyline"></div></div>
+
+  <div id="title" class="titlebox">
+    <div class="t1">90 MINUTEN?</div>
+    <div class="t2">WIE LANGE ROLLT DER BALL?</div>
+  </div>
+
+  <div id="hud">
+    <div id="phase" class="timer"><span>SPIELMINUTE <b id="phaseMin">0</b></span></div>
+    <div class="cards">
+      <div class="card ca"><div class="cname">STADIONUHR</div><div class="clabel">MIN</div><div class="cnum" style="width:400px"><span id="clockA">0:00</span></div></div>
+      <div class="card cb"><div class="cname">BALL ROLLT</div><div class="clabel">MIN</div><div class="cnum" style="width:400px"><span id="clockB">0:00</span></div><div class="cstat" style="width:180px"><span id="stB" class="spill tor">LÄUFT</span></div></div>
+    </div>
+  </div>
+
+  <div id="pitch"><div class="l mid"></div><div class="l circ"></div><div class="l boxL"></div><div class="l boxR"></div><div class="l goalL"></div><div class="l goalR"></div>
+    <div id="ball"><div id="ballring"></div><i></i></div></div>
+  <div id="event" class="pill py">FOUL</div>
+  <div id="ffPill" class="pill pw" style="position:absolute;left:540px;top:1048px;transform:translateX(-50%);font-size:22px;padding:6px 16px">▶▶ SCHNELLDURCHLAUF</div>
+
+  <div id="tlA" class="tl"><div class="name ka">STADIONUHR</div><div class="track"><div class="fill" id="fillA" style="background:var(--a)"></div></div></div>
+  <div id="tlB" class="tl"><div class="name kb">BALL ROLLT</div><div class="track" id="trackB"><div class="cover" id="coverB"></div></div></div>
+
+  <div id="dim" class="dim"></div>
+  <div id="endcard" class="panel" style="left:110px;top:600px;width:860px">
+    <div class="ptitle">ENDSTAND</div>
+    <div class="prow" id="rowA"><span class="ka">STADIONUHR</span><span>99:49</span></div>
+    <div class="prow" id="rowB"><span class="kb">BALL ROLLT</span><span>58:29</span></div>
+    <div class="psep"></div>
+    <div class="prow big" id="rowS"><span class="ky">STILLSTAND</span><span class="ky">41:20</span></div>
+    <div class="pwin ky" id="win" style="font-size:54px">≈ FAST EINE HALBZEIT</div>
+  </div>
+  <div id="nsz" class="pill py" style="position:absolute;left:540px;top:1270px;transform:translateX(-50%);font-size:40px">Ø NACHSPIELZEIT: 9:49</div>
+
+  <div id="paycard" class="panel" style="left:110px;top:600px;width:860px">
+    <div class="prow big" id="pay1"><span>DU ZAHLST</span><span class="ka">100 MIN</span></div>
+    <div class="psep"></div>
+    <div class="prow big" id="pay2"><span>FUSSBALL</span><span class="kb">58 MIN</span></div>
+  </div>
+  <div class="src" id="src">Quelle: DFB-Schiedsrichterchef Knut Kircher, Bundesliga 2025/26 (Stand 18. Spieltag)</div>
+
+  <div id="caps"></div>
+  <audio id="vo" class="clip" src="assets/voice.wav" data-start="0" data-duration="37.429" data-volume="1" data-sync-total></audio>
+</div>
+
+<script>
+(() => {
+  const S = window.SEG, CAPS = window.CAPS;
+  const $ = (s) => document.querySelector(s);
+  const tl = gsap.timeline({ paused: true });
+  const capAt = (seg, word, fb = 0) => {
+    const s = S[seg];
+    const c = CAPS.find(c => c.t0 >= s.start - .01 && c.t0 <= s.end && c.html.replace(/<[^>]+>/g, "").toLowerCase().includes(word.toLowerCase()));
+    return c ? c.t0 : s.start + fb;
+  };
+  const show = (el, t, from = { opacity: 0, y: 20, scale: .9 }, d = .3) =>
+    tl.fromTo(el, from, { opacity: 1, x: 0, y: 0, scale: 1, duration: d, ease: "back.out(2)", immediateRender: false }, t);
+  const hide = (el, t, d = .25) => tl.to(el, { opacity: 0, duration: d, ease: "power2.in" }, t);
+
+  // ---------- Untertitel ----------
+  CAPS.forEach(c => {
+    const d = document.createElement("div"); d.className = "cap"; d.innerHTML = c.html; $("#caps").appendChild(d);
+    tl.fromTo(d, { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: .12, immediateRender: false }, c.t0);
+    tl.set(d, { opacity: 0 }, c.t1);
+  });
+
+  // ---------- Simulation: Spielplan (Spielzeit in Sekunden) ----------
+  const TOTAL_M = 99 * 60 + 49, PLAY_M = 58 * 60 + 29, STOP_M = TOTAL_M - PLAY_M; // 5989 / 3509 / 2480
+  const tA = capAt("sim", "Anpfiff"), tZ = S.result.start - .05;
+  const spoken = ["Foul", "Einwurf", "Freistoß", "Auswechslung", "Torjubel"].map(w => [w.toUpperCase(), capAt("sim", w.toLowerCase())]);
+  const extra = ["ABSTOSS", "ECKE", "ABSEITS", "EINWURF", "VAR-CHECK", "VERLETZUNG", "FREISTOSS", "EINWURF", "AUSWECHSLUNG", "ABSTOSS", "EINWURF", "ECKE"];
+  // Stopps in Echtzeit: [start, ende, label]
+  const stops = spoken.map(([l, t]) => [t, t + .55, l]);
+  const t0x = S.sim.end + .05, span = tZ - .2 - t0x;
+  extra.forEach((l, k) => { const t = t0x + span * (k + .3) / extra.length; stops.push([t, t + span / extra.length * .45, l]); });
+  const Rs = stops.reduce((a, s) => a + s[1] - s[0], 0), Rp = (tZ - tA) - Rs;
+  const vp = PLAY_M / Rp, vs = STOP_M / Rs;
+  // Spielzeit-Funktion: liefert {m: Uhr, p: Ballzeit, stop: label|null}
+  function sim(t) {
+    if (t <= tA) return { m: 0, p: 0, stop: null };
+    t = Math.min(t, tZ);
+    let m = 0, p = 0, cur = tA, stop = null;
+    for (const [s0, s1, l] of stops) {
+      if (t <= s0) break;
+      m += (s0 - cur) * vp; p += (s0 - cur) * vp;
+      const e = Math.min(t, s1); m += (e - s0) * vs; cur = e;
+      if (t < s1) { stop = l; break; }
+    }
+    if (!stop) { m += (t - cur) * vp; p += (t - cur) * vp; }
+    return { m, p, stop };
+  }
+  // Ballzeit-Segmente für die türkise Leiste (Lücken = Stillstand)
+  { let cur = tA; const tr = $("#trackB");
+    const segAdd = (a, b) => { const s0 = sim(a + 1e-4).m, s1 = sim(b - 1e-4).m; const d = document.createElement("div"); d.className = "seg";
+      d.style.left = (s0 / TOTAL_M * 100) + "%"; d.style.width = ((s1 - s0) / TOTAL_M * 100) + "%"; tr.insertBefore(d, $("#coverB")); };
+    for (const [s0, s1] of stops) { segAdd(cur, s0); cur = s1; } segAdd(cur, tZ); }
+  ["#tlA .track", "#tlB .track"].forEach(sel => { const m = document.createElement("div"); m.className = "mark90"; m.style.left = (90 * 60 / TOTAL_M * 100) + "%"; $(sel).appendChild(m); });
+
+  const fmt = (sec) => { sec = Math.floor(sec); return `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, "0")}`; };
+  let lastStop = "#";
+  function update(t) {
+    const s = sim(t); if (t >= tZ) { s.m = TOTAL_M; s.p = PLAY_M; }
+    $("#clockA").textContent = fmt(s.m);
+    $("#clockB").textContent = fmt(s.p);
+    $("#phaseMin").textContent = Math.min(99, Math.floor(s.m / 60));
+    $("#fillA").style.transform = `scaleX(${s.m / TOTAL_M})`;
+    $("#coverB").style.left = (s.m / TOTAL_M * 100) + "%";
+    // Ball rollt nur ohne Stopp (Position aus Ballzeit -> friert ein)
+    const u = s.p / 120;
+    const bx = 460 + Math.sin(u * 1.3) * 330 + Math.sin(u * 3.1) * 60, by = 270 + Math.sin(u * 2.2 + 1) * 170;
+    $("#ball").style.transform = `translate(${bx}px, ${by}px)`;
+    $("#ballring").style.opacity = s.stop ? 1 : 0;
+    const st = t > tA && t < tZ ? (s.stop ? "STEHT" : "LÄUFT") : (t >= tZ ? "ABPFIFF" : "LÄUFT");
+    const sb = $("#stB"); sb.textContent = st; sb.className = "spill " + (st === "LÄUFT" ? "tor" : "save");
+    const ev = $("#event");
+    if (s.stop !== lastStop) { ev.textContent = s.stop || ""; lastStop = s.stop; }
+    ev.style.opacity = s.stop ? 1 : 0;
+  }
+  const clock = { t: 0 };
+  tl.to(clock, { t: window.TOTAL, duration: window.TOTAL, ease: "none", onUpdate: () => update(clock.t) }, 0);
+
+  // ---------- Szenen ----------
+  gsap.set(["#hud", "#pitch", "#tlA", "#tlB", "#ffPill", "#dim", "#endcard", "#paycard", "#nsz", "#src", "#rowA", "#rowB", "#rowS", "#win", "#pay1", "#pay2"], { opacity: 0 });
+  show("#title", .05, { opacity: 0, y: -30, scale: .95 }, .35);
+  tl.fromTo("#pitch", { opacity: 0, scale: .9 }, { opacity: 1, scale: 1, duration: .45, ease: "power3.out", immediateRender: false }, .5);
+  hide("#title", S.setup.start - .05);
+  show("#hud", S.setup.start, { opacity: 0, y: -30, scale: 1 }, .3);
+  show("#tlA", capAt("setup", "Rot"), { opacity: 0, x: -80, y: 0, scale: 1 }, .3);
+  show("#tlB", capAt("setup", "Türkis"), { opacity: 0, x: 80, y: 0, scale: 1 }, .3);
+  tl.fromTo(".card.ca", { scale: 1 }, { scale: 1.08, duration: .18, yoyo: true, repeat: 1 }, capAt("setup", "Rot"));
+  tl.fromTo(".card.cb", { scale: 1 }, { scale: 1.08, duration: .18, yoyo: true, repeat: 1 }, capAt("setup", "Türkis"));
+  show("#ffPill", S.sim.end + .05, { opacity: 0, y: 0, scale: .8 }, .2);
+  hide("#ffPill", tZ);
+
+  // Ergebnis
+  const tR = S.result.start;
+  tl.to("#dim", { opacity: .85, duration: .3 }, capAt("result", "Rot", .6) - .1);
+  show("#endcard", capAt("result", "Rot", .6) - .05, { opacity: 0, y: 40, scale: .96 }, .35);
+  show("#rowA", capAt("result", "hundert", 1.2) - .2, { opacity: 0, y: 10, scale: 1 }, .2);
+  show("#rowB", capAt("result", "achtundfünfzig", 2.5) - .1, { opacity: 0, y: 10, scale: 1 }, .2);
+  show("#rowS", capAt("why", "einundvierzig", .3), { opacity: 0, scale: .6, y: 0 }, .35);
+  show("#win", capAt("why", "halbzeit", 2.5), { opacity: 0, scale: .6, y: 0 }, .35);
+  tl.fromTo("#win", { textShadow: "0 0 0 rgba(246,180,64,0)" }, { textShadow: "0 0 40px rgba(246,180,64,.9)", duration: .4, immediateRender: false }, capAt("why", "halbzeit", 2.5));
+  show("#nsz", capAt("extra", "zehn", 1.2), { opacity: 0, scale: .5, y: 0 }, .3);
+  show("#src", capAt("extra", "zehn", 1.2) + .2, { opacity: 0, y: 0, scale: 1 }, .3);
+
+  // Pointe
+  const tP = S.punch.start;
+  hide(["#endcard", "#nsz"], tP - .05, .2);
+  show("#paycard", tP, { opacity: 0, y: 40, scale: .96 }, .3);
+  show("#pay1", capAt("punch", "hundert", .8), { opacity: 0, x: -60, y: 0, scale: 1 }, .25);
+  show("#pay2", capAt("punch", "achtundfünfzig", 2.6), { opacity: 0, x: 60, y: 0, scale: 1 }, .25);
+  tl.fromTo("#pay2", { scale: 1 }, { scale: 1.12, duration: .2, yoyo: true, repeat: 1, immediateRender: false }, capAt("punch", "fußball", 3.6));
+
+  tl.set({}, {}, window.TOTAL);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0); update(0);
+})();
+</script>
+</body>
+</html>

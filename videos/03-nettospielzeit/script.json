@@ -1,0 +1,23 @@
+{
+  "lead_in": 0.25,
+  "tail": 1.2,
+  "length_scale": 0.82,
+  "noise_scale": 0.85,
+  "noise_w": 1.0,
+  "pitch": 1.5,
+  "colors": {
+    "rot": "a", "stadionuhr": "a", "hundert": "a",
+    "türkis": "b", "ball": "b", "achtundfünfzig": "b",
+    "neunzig": "y", "einundvierzig": "y", "halbzeit!": "y", "halbzeit": "y", "zehn": "y", "stillstand": "y"
+  },
+  "segments": [
+    {"id": "hook",   "text": "Ein Fußballspiel dauert neunzig Minuten. Aber wie lange rollt der Ball wirklich?", "pause": 0.25},
+    {"id": "setup",  "text": "Zwei Uhren! Rot ist die Stadionuhr. Türkis läuft nur, wenn der Ball im Spiel ist.", "pause": 0.2},
+    {"id": "trap",   "text": "Klar, da fehlen ein paar Minuten, oder?", "pause": 0.25},
+    {"id": "sim",    "text": "Anpfiff! Foul. Einwurf. Freistoß. Auswechslung. Torjubel.", "pause": 2.2},
+    {"id": "result", "text": "Abpfiff! Rot zeigt fast hundert Minuten. Türkis? Nur achtundfünfzig!", "pause": 0.3},
+    {"id": "why",    "text": "Über einundvierzig Minuten steht der Ball still. Das ist fast eine ganze Halbzeit!", "pause": 0.2},
+    {"id": "extra",  "text": "Und das, obwohl schon fast zehn Minuten nachgespielt werden.", "pause": 0.3},
+    {"id": "punch",  "text": "Du zahlst also für hundert Minuten Stadion und bekommst achtundfünfzig Minuten Fußball!", "pause": 0.1}
+  ]
+}
