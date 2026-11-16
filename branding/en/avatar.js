@@ -1,0 +1,17 @@
+import { THREE, makeChar, pose, makeLabel, rbox, mat, house, tree, ground, baseScene } from "../../.claude/skills/tiktok-in-this-town/scripts/lib3d.js";
+const S = 1080;
+const r = new THREE.WebGLRenderer({ canvas: document.getElementById("c"), antialias: true, preserveDrawingBuffer: true });
+r.setPixelRatio(1); r.setSize(S, S, false); r.shadowMap.enabled = true; r.shadowMap.type = THREE.PCFSoftShadowMap;
+r.outputColorSpace = THREE.SRGBColorSpace; r.toneMapping = THREE.ACESFilmicToneMapping;
+const variant = new URLSearchParams(location.search).get("v") || "1";
+const sc = baseScene({ sky: variant === "2" ? ["#1b2a6b", "#ff9a6b"] : ["#4fa8ff", "#c9ecff"] });
+ground(sc, "#7cc45a");
+house(sc, -3.2, -3.5, { wall: "#f6d5b2", roof: "#d0573f" }); house(sc, 3.2, -3.5, { wall: "#cfe3f7", roof: "#4a6fa5", lit: variant === "2" });
+tree(sc, -5.5, -1.5, 1.1); tree(sc, 5.5, -1.5, 1.1);
+const kid = makeChar({ shirt: "#ff5d7a", pants: "#2f3a56", hair: "#5a3a1a", hairStyle: "spiky", skin: "#e0ac7e" });
+kid.root.position.set(0, 0, 0); sc.add(kid.root); pose(kid, "idle", 0); kid.setExpr(variant === "2" ? "shock" : "grin");
+kid.head.rotation.z = .08;
+const L = makeLabel(variant === "3" ? "1,000,000" : "?", { world: variant === "3" ? 2.4 : 1.5, w: variant === "3" ? 1600 : 512, h: variant === "3" ? 300 : 512, size: variant === "3" ? 200 : 420, stroke: 34 });
+L.sprite.position.set(0, 2.55, 0); sc.add(L.sprite);
+const cam = new THREE.PerspectiveCamera(38, 1, .1, 100); cam.position.set(0, 1.9, 4.6); cam.lookAt(0, 1.75, 0);
+r.render(sc, cam); window.done = true;
