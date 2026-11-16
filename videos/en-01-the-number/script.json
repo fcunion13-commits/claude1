@@ -1,0 +1,20 @@
+{
+  "voice": "am_michael",
+  "speed": 1.08,
+  "lead_in": 0.2,
+  "tail": 1.4,
+  "segments": [
+    {"id": "hook",    "text": "In this town, every baby is born with a number floating above their head.", "pause": 0.25},
+    {"id": "rule",    "text": "It shows exactly how many lives they will save. Most people get a zero. A firefighter might get a hundred.", "pause": 0.3},
+    {"id": "leo",     "text": "But one day, a boy named Leo was born with a number so big, it barely fit above his head. One million.", "pause": 0.3},
+    {"id": "hype",    "text": "The whole town went crazy. Everyone said he would become the greatest doctor in history.", "pause": 0.25},
+    {"id": "problem", "text": "But there was one problem. Leo fainted at the sight of blood, and he failed every single science test.", "pause": 0.2},
+    {"id": "teacher", "text": "His teacher even told the whole class that his number must be broken.", "pause": 0.3},
+    {"id": "quit",    "text": "So Leo gave up. He locked himself in his room and played video games every night, and slowly, the town forgot about him.", "pause": 0.35},
+    {"id": "virus",   "text": "Twenty years later, a mysterious virus spread through the town. The hospitals were full, and no scientist could find a cure.", "pause": 0.25},
+    {"id": "lab",     "text": "The answer was hidden inside one giant puzzle. But solving it would take them a hundred years.", "pause": 0.3},
+    {"id": "game",    "text": "Then one night, a strange new game appeared online. Millions of people started playing it, without knowing what they were really solving.", "pause": 0.3},
+    {"id": "twist",   "text": "Three days later, the scientists received a message. The puzzle was solved. And the game was made by Leo.", "pause": 0.35},
+    {"id": "end",     "text": "And above his head, for the very first time, the number started going down.", "pause": 0.1}
+  ]
+}

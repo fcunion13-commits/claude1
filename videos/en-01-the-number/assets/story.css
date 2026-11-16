@@ -1,0 +1,9 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Inter", sans-serif; }
+#gl { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+#caps { position: absolute; left: 0; right: 0; top: 1150px; height: 160px; }
+.cap { position: absolute; left: 30px; right: 30px; top: 0; text-align: center; opacity: 0; white-space: nowrap;
+  font: 900 84px/1.1 "Inter", sans-serif; color: #fff; letter-spacing: -.01em;
+  -webkit-text-stroke: 14px #000; paint-order: stroke fill;
+  text-shadow: 0 6px 0 rgba(0,0,0,.55); }
