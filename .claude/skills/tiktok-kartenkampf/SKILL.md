@@ -70,3 +70,15 @@ Pro Video:
    - Bei `fromTo` mitten in der Timeline immer `immediateRender: false` setzen.
 6. `npx hyperframes lint .` muss 0 Fehler zeigen. Dann `npx hyperframes snapshot --at …` und das Kontaktblatt ansehen.
 7. Rendern mit `npx hyperframes render -q delivery -o name.mp4`, danach committen und pushen.
+
+## Auswertungs-Regeln (gelten für jede Runde)
+- **Kommentare zählen unter ALLEN Kickreich-Videos**, alt und neu.
+- **1 Stimme pro Person und Runde, über alle Videos zusammen.** Doppelte werden per Nutzername gefiltert.
+- **Vereinswechsel:** Der neueste Kommentar einer Person zählt.
+- **Like-Bonus:** Likes auf den Kommentar zählen als Extra-Soldaten. Hat eine Person mehrere Kommentare, zählt der mit den meisten Likes.
+- **„Folgen zählt doppelt“ galt nur in Runde 0** (so in Video 1 angekündigt). Ab Runde 1 gibt es nur noch den Like-Bonus.
+- **Mehrere Vereine in einem Kommentar:** Der zuerst genannte Verein zählt.
+- **Nur Bild ohne Text:** zählt, wenn der Verein eindeutig erkennbar ist (z. B. „Niemand kann Dynamo stoppen“).
+- **Stichtag pro Runde:** Was danach kommt, zählt für die nächste Runde.
+- Spielstand pro Runde in `videos/kickreich-stand/stand-rundeN.json` speichern (user, verein, likes, video, notiz).
+- Spammer nicht bestrafen, sondern im Video als „treueste Krieger“ erwähnen. In der Wertung zählen sie trotzdem nur einmal.
