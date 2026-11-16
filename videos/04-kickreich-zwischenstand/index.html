@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="de" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="assets/gsap.min.js"></script>
+<script src="timings.js"></script>
+<script src="karte.js"></script>
+<link rel="stylesheet" href="assets/kartenkampf.css" />
+<style>
+  .board { position: absolute; left: 110px; top: 560px; width: 860px; padding: 34px 40px; border-radius: 26px; background: rgba(8, 26, 16, .94);
+           border: 2px solid rgba(255,255,255,.14); box-shadow: 0 30px 80px rgba(0,0,0,.55); opacity: 0; }
+  .board .bt { text-align: center; font: 800 26px var(--font); color: var(--muted); letter-spacing: .3em; margin-bottom: 22px; }
+  .brow { display: flex; align-items: center; height: 96px; font: 900 52px var(--font); color: #fff; opacity: 0; }
+  .brow .rk { width: 70px; font-size: 44px; }
+  .brow .chip { width: 46px; height: 46px; border-radius: 50%; margin-right: 22px; border: 4px solid #fff; }
+  .brow .nm { flex: 1; }
+  .brow .sv { color: var(--y); }
+  .brest { margin-top: 18px; padding-top: 18px; border-top: 2px solid rgba(255,255,255,.14); font: 800 30px/1.35 var(--font); color: #d8e6dd; opacity: 0; }
+  .brest b { color: var(--y); }
+  .heart { position: absolute; left: 760px; top: 900px; font: 900 44px var(--font); color: #fff; background: #fe2c55; padding: 8px 18px; border-radius: 30px; opacity: 0; white-space: nowrap; }
+  .goal { position: absolute; left: 120px; top: 1040px; width: 840px; padding: 22px 26px; border-radius: 22px; background: rgba(8,26,16,.94); border: 2px solid rgba(255,255,255,.14); opacity: 0; }
+  .goal .gt { display: flex; justify-content: space-between; font: 900 34px var(--font); color: #fff; margin-bottom: 12px; }
+  .goal .gt b { color: var(--y); }
+  .goal .gtrack { height: 40px; border-radius: 20px; background: rgba(255,255,255,.14); overflow: hidden; }
+  .goal .gfill { height: 100%; width: 100%; background: linear-gradient(90deg, #ffd23f, #ff9a3c); transform-origin: 0 50%; }
+  .tag3 { position: absolute; padding: 6px 14px; border-radius: 12px; background: #fff; color: #10151a; font: 900 30px var(--font); white-space: nowrap; opacity: 0; box-shadow: 0 8px 20px rgba(0,0,0,.4); }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="26.937" data-width="1080" data-height="1920" data-sync-total>
+  <div id="bg" class="bg"></div>
+  <svg id="mapsvg" viewBox="0 0 1080 1920">
+    <defs>
+      <marker id="ah" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#fff"/></marker>
+      <filter id="glow"><feGaussianBlur stdDeviation="10"/></filter>
+    </defs>
+    <g id="mapg">
+      <g id="teams"></g>
+      <g id="greys"></g>
+      <g id="glows"></g>
+      <g id="takeover"></g>
+      <g id="badges"></g>
+      <g id="arrows"></g>
+    </g>
+    <g id="trophy" opacity="0">
+      <path d="M-120,-150 H120 V-60 A120,120 0 0 1 -120,-60 Z" fill="#e8a800"/>
+      <path d="M-120,-130 C-200,-130 -200,-20 -100,-20" fill="none" stroke="#e8a800" stroke-width="22"/>
+      <path d="M120,-130 C200,-130 200,-20 100,-20" fill="none" stroke="#e8a800" stroke-width="22"/>
+      <rect x="-22" y="50" width="44" height="60" fill="#e8a800"/><rect x="-90" y="105" width="180" height="40" rx="8" fill="#e8a800"/>
+      <circle cx="0" cy="-70" r="62" fill="#fff6d0"/>
+      <text x="0" y="-45" text-anchor="middle" font-family="Inter" font-weight="900" font-size="78" fill="#c98f00">?</text>
+    </g>
+  </svg>
+  <div id="dimmer" class="dimmer"></div>
+  <div id="tags"></div>
+  <div id="cards"></div>
+  <div id="heart" class="heart">♥ +1 ⚔</div>
+
+  <div id="board" class="board">
+    <div class="bt">ZWISCHENSTAND</div>
+    <div id="rows"></div>
+    <div class="brest" id="brest">Je <b>2</b>: Bayern · Frankfurt · Duisburg · Regensburg · Zwickau<br>Je <b>1</b>: Chemnitz · Fürth · Erfurt · KSC · Mainz</div>
+  </div>
+  <div id="goal" class="goal"><div class="gt"><span>KOMMENTARE</span><span><b id="gnum">22</b> / 100</span></div><div class="gtrack"><div class="gfill" id="gfill"></div></div></div>
+
+  <div id="toppill" class="toppill">KICKREICH · 1 KOMMENTAR = 1 SOLDAT</div>
+  <div id="titles" class="titles"></div>
+  <div id="caps"></div>
+  <audio id="vo" class="clip" src="assets/voice.wav" data-start="0" data-duration="26.937" data-volume="1" data-sync-total></audio>
+</div>
+
+<script>
+(() => {
+  const S = window.SEG, CAPS = window.CAPS, M = window.MAP;
+  const $ = (s) => document.querySelector(s);
+  const NS = "http://www.w3.org/2000/svg";
+  const tl = gsap.timeline({ paused: true });
+  const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent && parent.appendChild(e); return e; };
+  const capAt = (seg, word, fb = 0) => {
+    const s = S[seg];
+    for (const c of CAPS) for (const w of c.words)
+      if (w.t0 >= s.start - .01 && w.t0 <= s.end && w.w.toLowerCase().replace(/[^\wäöüß]/g, "").startsWith(word.toLowerCase())) return w.t0;
+    return s.start + fb;
+  };
+  const T = (n) => M.teams.find(t => t.short === n);
+  const pop = (e, t, d = .25) => tl.fromTo(e, { opacity: 0, scale: .6 }, { opacity: 1, scale: 1, duration: d, ease: "back.out(2.5)", immediateRender: false }, t);
+
+  // Spielstand Runde 0 (Regel B: 1 pro Person, Follower x2 laut Video 1)
+  const VOTES = { "Osnabrück": 3, "Hansa": 3, "Dynamo": 3, "Bayern": 2, "Eintracht": 2, "Duisburg": 2, "Jahn": 2, "Zwickau": 2, "Chemnitz": 1, "Fürth": 1, "Erfurt": 1, "KSC": 1, "Mainz": 1 };
+  const TOP = [["Hansa", "Hansa Rostock"], ["Dynamo", "Dynamo Dresden"], ["Osnabrück", "VfL Osnabrück"]];
+
+  // Untertitel (Karaoke)
+  CAPS.forEach(c => {
+    const d = document.createElement("div"); d.className = "cap";
+    c.words.forEach((w, wi) => {
+      const s = document.createElement("span"); s.className = "w"; s.innerHTML = `<span class="wy">${w.w}</span>${w.w}`; d.appendChild(s);
+      const next = wi + 1 < c.words.length ? c.words[wi + 1].t0 : c.t1;
+      tl.set(s.firstChild, { opacity: 1 }, w.t0); tl.set(s.firstChild, { opacity: 0 }, next);
+    });
+    $("#caps").appendChild(d);
+    tl.fromTo(d, { opacity: 0, scale: .92 }, { opacity: 1, scale: 1, duration: .08, immediateRender: false }, c.t0);
+    tl.set(d, { opacity: 0 }, c.t1);
+  });
+  // Titel
+  let last = null;
+  function title(t, a, b, small = false) {
+    const d = document.createElement("div"); d.className = "title";
+    d.innerHTML = `<span class="l1">${a}</span><span class="l2${small ? " small" : ""}">${b}</span>`; $("#titles").appendChild(d);
+    if (last) tl.set(last, { opacity: 0 }, t);
+    tl.fromTo(d, { opacity: 0, scale: .82 }, { opacity: 1, scale: 1, duration: .2, ease: "back.out(2.5)", immediateRender: false }, t);
+    last = d;
+  }
+
+  // Karte (sofort bunt)
+  const tP = {}, tB = {}, gP = {};
+  M.teams.forEach(t => {
+    tP[t.i] = el("path", { d: t.path, class: "team", fill: t.color }, $("#teams"));
+    gP[t.i] = el("path", { d: t.path, class: "team", fill: "#4a5a52", opacity: 0 }, $("#greys"));
+    const g = el("g", { transform: `translate(${t.x} ${t.y})` }, $("#badges")); const inner = el("g", {}, g);
+    el("circle", { r: 15.5, fill: "#fff" }, inner); el("circle", { r: 12.5, fill: t.c1 }, inner); el("circle", { r: 7, fill: "none", stroke: t.c2, "stroke-width": 3 }, inner);
+    tB[t.i] = inner; gsap.set(inner, { transformOrigin: "50% 50%" });
+  });
+  const topT = TOP.map(([s]) => T(s));
+  const glows = topT.map(t => el("path", { d: t.path, fill: "#ffd23f", opacity: 0, filter: "url(#glow)" }, $("#glows")));
+  const outlines = topT.map(t => el("path", { d: t.path, fill: "none", stroke: "#ffd23f", "stroke-width": 7, opacity: 0 }, $("#glows")));
+
+  // ---------- 0–4 s: Hook ----------
+  title(0, "Dreikampf", "um die Spitze!");
+  tl.fromTo("#mapg", { scale: 1.25, svgOrigin: "540 900" }, { scale: 1, svgOrigin: "540 900", duration: .9, ease: "power3.out", immediateRender: false }, 0);
+  M.teams.forEach(t => { if (!topT.includes(t)) tl.to(tP[t.i], { opacity: .35, duration: .3 }, .25); });
+  topT.forEach((t, k) => {
+    const tk = .35 + k * .25;
+    tl.fromTo(glows[k], { opacity: 0 }, { opacity: .8, duration: .25, yoyo: true, repeat: 5, immediateRender: false }, tk);
+    tl.fromTo(outlines[k], { opacity: 0 }, { opacity: 1, duration: .2, immediateRender: false }, tk);
+    tl.fromTo(tB[t.i], { scale: 1 }, { scale: 2.2, duration: .3, ease: "back.out(3)", immediateRender: false }, tk);
+    const tag = document.createElement("div"); tag.className = "tag3"; tag.innerHTML = `${TOP[k][0] === "Osnabrück" ? "Osnabrück" : TOP[k][0] === "Hansa" ? "Rostock" : "Dresden"} · 3 ⚔`;
+    tag.style.left = (t.x - 95) + "px"; tag.style.top = (t.y - 85) + "px"; $("#tags").appendChild(tag); pop(tag, tk + .1);
+    tl.to(tag, { opacity: 0, duration: .2 }, S.r1.start - .05);
+  });
+  title(capAt("hook", "gleichauf", 2.6), "3 Vereine", "gleichauf!");
+
+  // ---------- Regeln ----------
+  const tR1 = S.r1.start;
+  title(tR1, "So geht", "Kickreich");
+  topT.forEach((t, k) => { tl.to([glows[k], outlines[k]], { opacity: 0, duration: .2 }, tR1); tl.to(tB[t.i], { scale: 1, duration: .2 }, tR1); });
+  M.teams.forEach(t => tl.to(tP[t.i], { opacity: 1, duration: .2 }, tR1));
+  // Karte "blinkt" Gebiet für Gebiet
+  const order = [...M.teams].sort((a, b) => a.y - b.y);
+  order.forEach((t, k) => tl.fromTo(tP[t.i], { opacity: .4 }, { opacity: 1, duration: .25, immediateRender: false }, capAt("r1", "region", 1.5) - .6 + k * .012));
+  // Kommentar = Soldat
+  const card = document.createElement("div"); card.className = "ccard"; card.style.top = "860px";
+  card.innerHTML = `<div class="av" style="background:#004899">K</div><div class="user">@dein_name</div><div class="txt">Mein Verein! 💪</div>
+    <svg class="crest" viewBox="-30 -30 60 60"><circle r="29" fill="#fff" stroke="#dde3e8" stroke-width="2"/><circle r="24" fill="#004899"/><circle r="13" fill="none" stroke="#fff" stroke-width="5"/></svg><div class="plus">+1 ⚔</div>`;
+  $("#cards").appendChild(card);
+  const tR2 = S.r2.start;
+  title(tR2, "1 Kommentar", "= 1 Soldat");
+  tl.to("#dimmer", { opacity: 1, duration: .2 }, tR2);
+  tl.fromTo(card, { opacity: 0, x: -200 }, { opacity: 1, x: 0, duration: .25, ease: "back.out(1.6)", immediateRender: false }, tR2 + .05);
+  pop(card.querySelector(".plus"), capAt("r2", "soldat", 1.2));
+  // Likes
+  const tR3 = S.r3.start;
+  title(tR3, "Likes", "zählen extra");
+  tl.fromTo("#heart", { opacity: 0, scale: .3, y: 40 }, { opacity: 1, scale: 1, y: 0, duration: .3, ease: "back.out(3)", immediateRender: false }, capAt("r3", "likes", .1) + .15);
+  tl.to("#heart", { scale: 1.15, duration: .12, yoyo: true, repeat: 3 }, capAt("r3", "extra", 1.4));
+  // Sieg = Gebiet
+  const tR4 = S.r4.start;
+  title(tR4, "Sieg =", "ganzes Gebiet");
+  tl.to([card, "#heart"], { opacity: 0, duration: .2 }, tR4);
+  tl.to("#dimmer", { opacity: 0, duration: .2 }, tR4);
+  const A = T("Hansa"), B = T("Wolfsburg");
+  const arr = el("g", { opacity: 0 }, $("#arrows"));
+  const dx = B.x - A.x, dy = B.y - A.y, L = Math.hypot(dx, dy);
+  const path = `M${A.x + dx / L * 22},${A.y + dy / L * 22} Q${(A.x + B.x) / 2 - dy * .3},${(A.y + B.y) / 2 + dx * .3} ${B.x - dx / L * 24},${B.y - dy / L * 24}`;
+  el("path", { d: path, fill: "none", stroke: "#1a1a1a", "stroke-width": 13, "stroke-linecap": "round", opacity: .5 }, arr);
+  el("path", { d: path, fill: "none", stroke: "#fff", "stroke-width": 7, "stroke-linecap": "round", "marker-end": "url(#ah)" }, arr);
+  const over = el("path", { d: B.path, class: "team", fill: A.color, opacity: 0 }, $("#takeover"));
+  tl.fromTo(arr, { opacity: 0 }, { opacity: 1, duration: .2, immediateRender: false }, tR4 + .2);
+  tl.to(over, { opacity: 1, duration: .35 }, capAt("r4", "gebiet", 1.4) - .2);
+  tl.to(tB[B.i], { scale: 0, duration: .25 }, capAt("r4", "gebiet", 1.4) - .2);
+  // Rückgängig (war nur Beispiel)
+  tl.to([arr, over], { opacity: 0, duration: .2 }, S.stand.start - .05);
+  tl.to(tB[B.i], { scale: 1, duration: .2 }, S.stand.start - .05);
+
+  // ---------- Stand ----------
+  const tS = S.stand.start;
+  title(tS, "Zwischen-", "stand");
+  M.teams.forEach(t => { if (!VOTES[t.short]) tl.to(gP[t.i], { opacity: 1, duration: .3 }, tS); });
+  tl.to("#dimmer", { opacity: .55, duration: .25 }, tS);
+  tl.fromTo("#board", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .3, ease: "back.out(1.6)", immediateRender: false }, tS + .05);
+  TOP.forEach(([s, name], k) => {
+    const t = T(s); const r = document.createElement("div"); r.className = "brow";
+    r.innerHTML = `<span class="rk">1.</span><span class="chip" style="background:${t.c1}"></span><span class="nm">${name}</span><span class="sv">3 ⚔</span>`;
+    $("#rows").appendChild(r);
+    tl.fromTo(r, { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: .22, ease: "back.out(2)", immediateRender: false }, tS + .2 + k * .18);
+  });
+  tl.fromTo("#brest", { opacity: 0 }, { opacity: 1, duration: .3, immediateRender: false }, capAt("stand", "bayern", 1));
+
+  // ---------- CTA ----------
+  const tC = S.cta.start;
+  title(tC, "Dein Verein", "fehlt noch?");
+  tl.to("#board", { opacity: 0, duration: .2 }, tC);
+  tl.to("#dimmer", { opacity: .3, duration: .2 }, tC);
+  M.teams.forEach(t => { if (!VOTES[t.short]) tl.fromTo(gP[t.i], { opacity: 1 }, { opacity: .35, duration: .25, yoyo: true, repeat: 3, immediateRender: false }, tC + .1); });
+  const tK = capAt("cta", "kommentare", 2);
+  title(tK, "Schreib ihn", "in die Kommentare!");
+  const tH = capAt("cta", "hundert", 3.3);
+  title(tH, "Runde 1", "bei 100 Kommentaren");
+  tl.fromTo("#goal", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .3, ease: "back.out(2)", immediateRender: false }, tH);
+  tl.fromTo("#gfill", { scaleX: 0 }, { scaleX: .22, duration: .8, ease: "power3.out", immediateRender: false }, tH + .2);
+  gsap.set("#gfill", { scaleX: 0 });
+  gsap.set("#trophy", { x: 540, y: 1390, scale: .5, transformOrigin: "50% 50%" });
+  tl.fromTo("#trophy", { opacity: 0, scale: .2 }, { opacity: 1, scale: .55, duration: .35, ease: "back.out(2)", immediateRender: false }, tH + .5);
+
+  tl.set({}, {}, window.TOTAL);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+})();
+</script>
+</body>
+</html>

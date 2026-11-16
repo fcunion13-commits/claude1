@@ -1,0 +1,66 @@
+/* Kartenkampf-Stil: grüner Stadion-Hintergrund, zweizeiliger Titel weiß/gelb, Karaoke-Untertitel */
+:root {
+  --g0: #0b2a1b; --g1: #0f3b26; --g2: #061a10;
+  --y: #ffd23f; --ink: #ffffff; --muted: #9fb3a8;
+  --font: "Inter", sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--g2); }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: var(--font); color: var(--ink); }
+
+.bg { position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.018) 0 90px, rgba(0,0,0,.03) 90px 180px),
+    radial-gradient(80% 55% at 50% 42%, #155234 0%, var(--g1) 45%, var(--g2) 100%); }
+.bg::after { content: ""; position: absolute; inset: 0; background: radial-gradient(120% 70% at 50% 50%, transparent 55%, rgba(0,0,0,.45) 100%); }
+
+/* Kopfzeile */
+.toppill { position: absolute; left: 50%; top: 92px; transform: translateX(-50%); padding: 7px 18px; border-radius: 999px;
+  background: #fff; color: #0b1a12; font: 900 21px/1 var(--font); letter-spacing: .02em; white-space: nowrap; }
+.titles { position: absolute; left: 0; right: 0; top: 132px; height: 200px; }
+.title { position: absolute; left: 0; right: 0; top: 0; text-align: center; opacity: 0; }
+.title .l1, .title .l2 { display: block; font: 900 82px/1.02 var(--font); letter-spacing: -.005em; text-transform: uppercase;
+  text-shadow: 0 6px 22px rgba(0,0,0,.45); white-space: nowrap; }
+.title .l2 { color: var(--y); }
+.title .l2.small { font-size: 46px; margin-top: 6px; }
+
+/* Karte */
+#mapsvg { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: visible; }
+.kreis { fill: #5c6e66; stroke: #d7e2dc; stroke-width: 1.3; stroke-linejoin: round; }
+.team { stroke: #ffffff; stroke-width: 2.6; stroke-linejoin: round; }
+.badge circle.o { fill: #ffffff; }
+
+/* Karaoke-Untertitel */
+#caps { position: absolute; left: 0; right: 0; top: 1565px; height: 90px; }
+.cap { position: absolute; left: 40px; right: 40px; top: 0; text-align: center; opacity: 0; white-space: nowrap; }
+.cap .w { position: relative; display: inline-block; margin: 0 9px; font: 800 50px/1.1 var(--font); color: #fff;
+  text-shadow: 0 3px 14px rgba(0,0,0,.75); }
+.cap .w .wy { position: absolute; left: 0; top: 0; color: var(--y); opacity: 0; }
+
+/* Kommentar-Karten */
+.ccard { position: absolute; left: 190px; width: 700px; height: 104px; border-radius: 18px; background: #fff; color: #10151a;
+  box-shadow: 0 14px 40px rgba(0,0,0,.45); opacity: 0; }
+.ccard .av { position: absolute; left: 20px; top: 24px; width: 56px; height: 56px; border-radius: 50%; color: #fff;
+  font: 900 28px/56px var(--font); text-align: center; }
+.ccard .user { position: absolute; left: 94px; top: 18px; font: 600 21px var(--font); color: #7b8590; }
+.ccard .txt { position: absolute; left: 94px; top: 48px; font: 800 33px var(--font); }
+.ccard .txt .at { color: #2f7de1; }
+.ccard .crest { position: absolute; right: 22px; top: 22px; width: 60px; height: 60px; }
+.ccard .plus { position: absolute; right: 96px; top: 30px; height: 44px; padding: 0 14px; border-radius: 22px; background: #1fb257; color: #fff;
+  font: 900 26px/44px var(--font); opacity: 0; white-space: nowrap; }
+.ccard .plus2 { background: var(--y); color: #1a1400; }
+.ccard .tag { position: absolute; left: 290px; top: 14px; padding: 4px 10px; border-radius: 8px; background: #2f7de1; color: #fff; font: 900 15px var(--font); opacity: 0; }
+
+/* Profil-Karte */
+.pcard { position: absolute; left: 165px; top: 760px; width: 750px; height: 170px; border-radius: 24px; background: #fff; color: #10151a;
+  box-shadow: 0 18px 50px rgba(0,0,0,.5); opacity: 0; }
+.pcard img { position: absolute; left: 24px; top: 24px; width: 122px; height: 122px; border-radius: 50%; }
+.pcard .h { position: absolute; left: 170px; top: 38px; font: 900 44px var(--font); }
+.pcard .d { position: absolute; left: 172px; top: 100px; font: 600 24px var(--font); color: #7b8590; }
+.fbtn { position: absolute; left: 395px; top: 950px; width: 290px; height: 72px; }
+.fbtn > span { position: absolute; inset: 0; border-radius: 12px; font: 900 32px/72px var(--font); text-align: center; opacity: 0; }
+.fbtn .f1 { background: #fe2c55; color: #fff; } .fbtn .f2 { background: #e9ecef; color: #444; }
+
+.pinlabel { position: absolute; padding: 9px 18px; border-radius: 12px; background: #fff; color: #10151a; font: 900 28px var(--font); white-space: nowrap; box-shadow: 0 8px 24px rgba(0,0,0,.4); }
+.ex { position: absolute; right: 80px; top: 352px; padding: 6px 12px; border-radius: 8px; background: #fff; color: #10151a; font: 900 18px var(--font); letter-spacing: .06em; opacity: 0; }
+.dimmer { position: absolute; inset: 0; background: rgba(4, 18, 10, .55); opacity: 0; }

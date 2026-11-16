@@ -65,5 +65,6 @@
  ["Wacker Burghausen", "SVW", "Wacker", 12.83, 48.17, "#1b1b1b", "#ffffff"],
  ["Energie Oberlausitz", "NFV", "Görlitz", 14.99, 51.15, "#008f4c", "#ffffff"],
  ["Greifswalder FC", "GFC", "Greifswald", 13.38, 54.09, "#004b9b", "#ffffff"],
- ["FC Schweinfurt 05", "S05", "Schnüdel", 10.23, 50.05, "#008f4c", "#ffffff"]
+ ["FC Schweinfurt 05", "S05", "Schnüdel", 10.23, 50.05, "#008f4c", "#ffffff"],
+ ["FSV Zwickau", "FSV", "Zwickau", 12.5, 50.72, "#c8102e", "#ffffff"]
 ]

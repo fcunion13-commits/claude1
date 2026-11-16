@@ -1,0 +1,18 @@
+{
+  "lead_in": 0.15,
+  "tail": 1.0,
+  "length_scale": 0.82,
+  "noise_scale": 0.85,
+  "noise_w": 1.0,
+  "pitch": 1.5,
+  "colors": {"dreikampf": "y", "gleichauf!": "y", "gleichauf": "y", "soldat": "y", "likes": "y", "extra.": "y", "extra": "y", "gebiet.": "y", "gebiet": "y", "kommentare!": "y", "hundert": "y", "null": "y", "zwei": "y", "kickreich:": "y"},
+  "segments": [
+    {"id": "hook",  "text": "Dreikampf an der Spitze! Rostock, Dresden und Osnabrück liegen gleichauf!", "pause": 0.2},
+    {"id": "r1",    "text": "So geht Kickreich: Jeder Verein regiert seine Region.", "pause": 0.1},
+    {"id": "r2",    "text": "Ein Kommentar pro Person ist ein Soldat für deinen Verein.", "pause": 0.1},
+    {"id": "r3",    "text": "Likes auf deinen Kommentar zählen extra.", "pause": 0.1},
+    {"id": "r4",    "text": "Und wer gewinnt, schnappt sich das Gebiet.", "pause": 0.2},
+    {"id": "stand", "text": "Dahinter lauern Bayern, Frankfurt, Duisburg, Regensburg und Zwickau mit je zwei Soldaten.", "pause": 0.2},
+    {"id": "cta",   "text": "Dein Verein hat noch null? Schreib ihn in die Kommentare! Bei hundert Kommentaren startet Runde eins!", "pause": 0.1}
+  ]
+}
