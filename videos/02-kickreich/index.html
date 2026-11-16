@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="de" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="assets/gsap.min.js"></script>
+<script src="timings.js"></script>
+<script src="karte.js"></script>
+<link rel="stylesheet" href="assets/kartenkampf.css" />
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="32.532" data-width="1080" data-height="1920" data-sync-total>
+  <div id="bg" class="bg"></div>
+
+  <svg id="mapsvg" viewBox="0 0 1080 1920">
+    <defs>
+      <marker id="ah" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#fff"/></marker>
+      <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffe066"/><stop offset="1" stop-color="#f5b700"/></linearGradient>
+    </defs>
+    <g id="mapg">
+      <g id="kreise"></g>
+      <g id="teams"></g>
+      <g id="takeover"></g>
+      <path id="goldmap" fill="url(#gold)" stroke="#fff3b0" stroke-width="3"/>
+      <g id="badges"></g>
+      <g id="arrows"></g>
+    </g>
+    <g id="pin" opacity="0">
+      <path d="M0,0 C-26,-34 -34,-48 -34,-66 A34,34 0 1 1 34,-66 C34,-48 26,-34 0,0Z" fill="#ff3b30" stroke="#fff" stroke-width="5"/>
+      <circle cx="0" cy="-66" r="13" fill="#fff"/>
+    </g>
+    <g id="trophy" opacity="0">
+      <path d="M-120,-150 H120 V-60 A120,120 0 0 1 -120,-60 Z" fill="#e8a800"/>
+      <path d="M-120,-130 C-200,-130 -200,-20 -100,-20" fill="none" stroke="#e8a800" stroke-width="22"/>
+      <path d="M120,-130 C200,-130 200,-20 100,-20" fill="none" stroke="#e8a800" stroke-width="22"/>
+      <rect x="-22" y="50" width="44" height="60" fill="#e8a800"/>
+      <rect x="-90" y="105" width="180" height="40" rx="8" fill="#e8a800"/>
+      <path d="M-120,-150 H120 V-60 A120,120 0 0 1 -120,-60 Z" fill="none" stroke="#fff3b0" stroke-width="5" opacity=".7"/>
+      <circle cx="0" cy="-70" r="62" fill="#fff6d0"/>
+      <text x="0" y="-45" text-anchor="middle" font-family="Inter" font-weight="900" font-size="78" fill="#c98f00">?</text>
+    </g>
+  </svg>
+
+  <div id="dimmer" class="dimmer"></div>
+  <div id="topfade" style="position:absolute;left:0;right:0;top:0;height:420px;background:linear-gradient(#06140dee 55%,#06140d00);opacity:0"></div>
+  <div id="pinlabel" class="pinlabel" style="opacity:0">DEIN VEREIN?</div>
+  <div id="ex" class="ex">BEISPIEL</div>
+  <div id="cards"></div>
+  <div id="pcard" class="pcard"><img src="assets/avatar.png" alt="" /><div class="h">@kickreich</div><div class="d">Welcher Verein erobert Deutschland?</div></div>
+  <div id="fbtn" class="fbtn"><span class="f1">Folgen</span><span class="f2">Gefolgt ✓</span></div>
+
+  <div id="toppill" class="toppill">KICKREICH · 1 KOMMENTAR = 1 SOLDAT</div>
+  <div id="titles" class="titles"></div>
+  <div id="confetti"></div>
+  <div id="caps"></div>
+
+  <audio id="vo" class="clip" src="assets/voice.wav" data-start="0" data-duration="32.532" data-volume="1" data-sync-total></audio>
+</div>
+
+<script>
+(() => {
+  const S = window.SEG, CAPS = window.CAPS, M = window.MAP;
+  const $ = (s) => document.querySelector(s);
+  const NS = "http://www.w3.org/2000/svg";
+  const tl = gsap.timeline({ paused: true });
+  const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent && parent.appendChild(e); return e; };
+  const capAt = (seg, word, fb = 0) => {
+    const s = S[seg];
+    for (const c of CAPS) for (const w of c.words)
+      if (w.t0 >= s.start - .01 && w.t0 <= s.end && w.w.toLowerCase().replace(/[^\wäöüß]/g, "").startsWith(word.toLowerCase())) return w.t0;
+    return s.start + fb;
+  };
+  const T = (name) => M.teams.find(t => t.short === name);
+
+  // ---------- Untertitel (Karaoke: aktives Wort gelb) ----------
+  CAPS.forEach((c, ci) => {
+    const d = document.createElement("div"); d.className = "cap";
+    c.words.forEach((w, wi) => {
+      const s = document.createElement("span"); s.className = "w"; s.innerHTML = `<span class="wy">${w.w}</span>${w.w}`; d.appendChild(s);
+      const next = wi + 1 < c.words.length ? c.words[wi + 1].t0 : c.t1;
+      tl.set(s.firstChild, { opacity: 1 }, w.t0); tl.set(s.firstChild, { opacity: 0 }, next);
+    });
+    $("#caps").appendChild(d);
+    tl.fromTo(d, { opacity: 0, scale: .92 }, { opacity: 1, scale: 1, duration: .08, immediateRender: false }, c.t0);
+    tl.set(d, { opacity: 0 }, c.t1);
+  });
+
+  // ---------- Titel (zweizeilig, weiß/gelb) ----------
+  let lastTitle = null;
+  function title(t, l1, l2, small = false) {
+    const d = document.createElement("div"); d.className = "title";
+    d.innerHTML = `<span class="l1">${l1}</span><span class="l2${small ? " small" : ""}">${l2}</span>`;
+    $("#titles").appendChild(d);
+    if (lastTitle) tl.set(lastTitle, { opacity: 0 }, t);
+    tl.fromTo(d, { opacity: 0, scale: .82 }, { opacity: 1, scale: 1, duration: .22, ease: "back.out(2.5)", immediateRender: false }, t);
+    lastTitle = d; return d;
+  }
+
+  // ---------- Karte ----------
+  const gK = $("#kreise"), gT = $("#teams"), gO = $("#takeover"), gB = $("#badges"), gA = $("#arrows");
+  M.kreise.forEach(p => el("path", { d: p, class: "kreis" }, gK));
+  const tPath = {}, tBadge = {};
+  M.teams.forEach(t => {
+    tPath[t.i] = el("path", { d: t.path, class: "team", fill: t.color, opacity: 0 }, gT);
+    const g = el("g", { class: "badge", transform: `translate(${t.x} ${t.y})` }, gB);
+    const inner = el("g", {}, g);
+    el("circle", { r: 15.5, class: "o" }, inner);
+    el("circle", { r: 12.5, fill: t.c1 }, inner);
+    el("circle", { r: 7, fill: "none", stroke: t.c2, "stroke-width": 3 }, inner);
+    tBadge[t.i] = inner;
+  });
+  $("#goldmap").setAttribute("d", M.outline);
+  gsap.set("#goldmap", { opacity: 0 });
+  Object.values(tBadge).forEach(b => gsap.set(b, { scale: 0, transformOrigin: "50% 50%" }));
+  const order = [...M.teams].sort((a, b) => a.y - b.y || a.x - b.x);
+
+  // ---------- Szene 1: Hook ----------
+  title(0.05, "Wenn jeder Verein", "ein Land hätte?");
+  tl.from("#mapg", { opacity: 0, scale: .92, svgOrigin: "540 950", duration: .5, ease: "power3.out" }, 0.05);
+  tl.from("#toppill", { opacity: 0, y: -20, duration: .3 }, 0.1);
+  // Wappen tauchen nacheinander auf
+  order.forEach((t, k) => tl.to(tBadge[t.i], { scale: 1, duration: .25, ease: "back.out(3)" }, 0.6 + k * (2.6 / order.length)));
+
+  // ---------- Szene 2: Karte färbt sich ----------
+  const tMap = S.map.start;
+  const counts = [12, 31, 48, 67];
+  counts.forEach((n, k) => title(tMap + k * .28, `${n} Vereine`, n === 67 ? "67 Reiche" : "&nbsp;"));
+  order.forEach((t, k) => tl.to(tPath[t.i], { opacity: 1, duration: .3 }, tMap + .2 + (t.y - 350) / 1150 * 1.2));
+  tl.to("#kreise", { opacity: 0, duration: .6 }, tMap + 1.2);
+  // Konfetti
+  const confCols = ["#ffd23f", "#ff6b8b", "#5aa9f0", "#3fd0c0", "#ffffff", "#b57cf2"];
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const tConf = capAt("map", "willkommen", 2.5);
+  for (let i = 0; i < 70; i++) {
+    const c = document.createElement("div");
+    const w = 10 + rnd() * 10;
+    c.style.cssText = `position:absolute;left:${rnd() * 1080}px;top:-40px;width:${w}px;height:${w * .5}px;background:${confCols[i % 6]};opacity:0`;
+    $("#confetti").appendChild(c);
+    const t0 = tConf + rnd() * .5;
+    tl.set(c, { opacity: 1 }, t0);
+    tl.to(c, { y: 700 + rnd() * 1300, x: (rnd() - .5) * 300, rotation: rnd() * 720, duration: 2.2, ease: "power1.in" }, t0);
+    tl.set(c, { opacity: 0 }, t0 + 2.2);
+  }
+  title(tConf, "Willkommen im", "Kickreich");
+
+  // ---------- Szene 3: Armee ----------
+  title(S.army.start, "Ab jetzt", "wird erobert!");
+  const me = T("Eintracht");
+  const tArmy = capAt("army", "armee", 1.2);
+  title(tArmy, "Die Armee", "bist du!");
+  gsap.set("#pin", { x: me.x, y: me.y - 10 });
+  tl.fromTo("#pin", { opacity: 0, y: me.y - 220 }, { opacity: 1, y: me.y - 10, duration: .35, ease: "bounce.out", immediateRender: false }, tArmy);
+  gsap.set("#pinlabel", { left: me.x - 110, top: me.y - 175 });
+  tl.fromTo("#pinlabel", { opacity: 0, scale: .6 }, { opacity: 1, scale: 1, duration: .25, ease: "back.out(3)", immediateRender: false }, tArmy + .3);
+  tl.to(["#pin", "#pinlabel"], { opacity: 0, duration: .2 }, S.vote.start - .1);
+
+  // ---------- Szene 4/5: Kommentare = Soldaten ----------
+  const comments = [
+    ["L", "#2f7de1", "@lukas.s04", "Schalke!! 💙", "Schalke"],
+    ["M", "#f2b800", "@mia_bvb09", "BVB natürlich", "BVB"],
+    ["T", "#e3262e", "@tim.fcb", "Bayern, wer sonst", "Bayern"],
+    ["J", "#d9302f", "@jana.effzeh", "Effzeh! 🐐", "Effzeh"],
+  ];
+  const cardEls = comments.map(([a, ac, u, txt, team], k) => {
+    const t = T(team);
+    const d = document.createElement("div"); d.className = "ccard"; d.style.top = (560 + k * 122) + "px";
+    d.innerHTML = `<div class="av" style="background:${ac}">${a}</div><div class="user">${u}</div><div class="txt">${txt}</div>
+      <svg class="crest" viewBox="-30 -30 60 60"><circle r="29" fill="#fff" stroke="#dde3e8" stroke-width="2"/><circle r="24" fill="${t.c1}"/><circle r="13" fill="none" stroke="${t.c2}" stroke-width="5"/></svg>
+      <div class="plus">+1 ⚔</div><div class="plus plus2">+2 ⚔</div>${k === 1 ? '<div class="tag">FOLGT</div>' : ""}`;
+    $("#cards").appendChild(d); return d;
+  });
+  const tV = S.vote.start;
+  title(tV, "1 Kommentar", "= 1 Soldat");
+  tl.to("#dimmer", { opacity: 1, duration: .25 }, tV);
+  cardEls.forEach((c, k) => tl.fromTo(c, { opacity: 0, x: k % 2 ? 260 : -260 }, { opacity: 1, x: 0, duration: .28, ease: "back.out(1.6)", immediateRender: false }, tV + .1 + k * .25));
+  const tSoldat = capAt("vote", "soldaten", 1);
+  cardEls.forEach((c, k) => tl.fromTo(c.querySelector(".plus"), { opacity: 0, scale: .4 }, { opacity: 1, scale: 1, duration: .2, ease: "back.out(3)", immediateRender: false }, tSoldat + k * .12));
+  // Folgen zählt doppelt
+  const tF = S.follow.start;
+  title(tF, "Folgen", "= 2 Soldaten");
+  cardEls.forEach((c, k) => { if (k !== 1) tl.to(c, { opacity: .35, duration: .2 }, tF); });
+  tl.fromTo(cardEls[1].querySelector(".tag"), { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .2, immediateRender: false }, tF + .2);
+  tl.to(cardEls[1], { scale: 1.06, duration: .2 }, tF + .2);
+  const tZwei = capAt("follow", "zwei", 1.2);
+  tl.to(cardEls[1].querySelector(".plus"), { opacity: 0, duration: .1 }, tZwei);
+  tl.fromTo(cardEls[1].querySelector(".plus2"), { opacity: 0, scale: .4 }, { opacity: 1, scale: 1.15, duration: .25, ease: "back.out(4)", immediateRender: false }, tZwei);
+  tl.to(cardEls, { opacity: 0, x: 0, duration: .2 }, S.round.start - .1);
+  tl.to("#dimmer", { opacity: 0, duration: .25 }, S.round.start - .1);
+
+  // ---------- Szene 6: Angriffe ----------
+  const attacks = [["BVB", "Schalke"], ["Bayern", "Augsburg"], ["HSV", "Werder"], ["Leipzig", "HFC"], ["VfB", "KSC"]];
+  const tR = S.round.start;
+  title(tR, "Jede Runde:", "Angriff!");
+  tl.fromTo("#ex", { opacity: 0 }, { opacity: 1, duration: .2, immediateRender: false }, tR);
+  const tStark = capAt("round", "meisten", 1);
+  attacks.forEach(([a, b], k) => {
+    const A = T(a), B = T(b);
+    const mx = (A.x + B.x) / 2, my = (A.y + B.y) / 2, dx = B.x - A.x, dy = B.y - A.y, L = Math.hypot(dx, dy);
+    const sx = A.x + dx / L * 22, sy = A.y + dy / L * 22, ex = B.x - dx / L * 24, ey = B.y - dy / L * 24;
+    const cx = mx - dy * .3, cy = my + dx * .3;
+    const g = el("g", { opacity: 0 }, gA);
+    el("path", { d: `M${sx},${sy} Q${cx},${cy} ${ex},${ey}`, fill: "none", stroke: "#1a1a1a", "stroke-width": 13, "stroke-linecap": "round", opacity: .5 }, g);
+    el("path", { d: `M${sx},${sy} Q${cx},${cy} ${ex},${ey}`, fill: "none", stroke: "#fff", "stroke-width": 7, "stroke-linecap": "round", "marker-end": "url(#ah)" }, g);
+    const ring = el("circle", { cx: A.x, cy: A.y, r: 24, fill: "none", stroke: "#ffd23f", "stroke-width": 5, opacity: 0 }, gA);
+    tl.fromTo(ring, { opacity: 0 }, { opacity: 1, duration: .15, immediateRender: false }, tR + .25 + k * .18);
+    tl.to(tBadge[A.i], { scale: 1.6, duration: .2, ease: "back.out(3)" }, tR + .25 + k * .18);
+    tl.fromTo(g, { opacity: 0 }, { opacity: 1, duration: .2, immediateRender: false }, tStark + k * .2);
+    tl.to([g, ring], { opacity: 0, duration: .2 }, S.win.end);
+    tl.to(tBadge[A.i], { scale: 1, duration: .2 }, S.win.end);
+    // Übernahme: Gebiet von B bekommt die Farbe von A
+    const over = el("path", { d: B.path, class: "team", fill: A.color, opacity: 0 }, gO);
+    tl.to(over, { opacity: 1, duration: .35 }, capAt("win", "färbt", .5) + k * .15);
+    tl.to(tBadge[B.i], { scale: 0, duration: .25 }, capAt("win", "färbt", .5) + k * .15);
+  });
+  title(S.win.start, "Sieg =", "Gebiet erobert");
+
+  // ---------- Szene 7: Verlierer verschwinden (Zoom in den Osten) ----------
+  const tL = S.lose.start;
+  title(tL, "Keine Truppen?", "Weg von der Karte!");
+  const Z = T("Energie");
+  // Zoom-Ursprung so wählen, dass Z nach dem Skalieren in der Bildmitte (540/900) landet
+  const ZS = 2.1, ZO = `${(ZS * Z.x - 540) / (ZS - 1)} ${(ZS * Z.y - 900) / (ZS - 1)}`;
+  tl.to("#mapg", { scale: ZS, svgOrigin: ZO, duration: .6, ease: "power2.inOut" }, tL);
+  tl.to("#topfade", { opacity: 1, duration: .3 }, tL);
+  tl.to("#topfade", { opacity: 0, duration: .3 }, S.end.start);
+  tl.to("#ex", { opacity: 0, duration: .2 }, tL);
+  [["Görlitz", "Dynamo"], ["Energie", "Union"], ["Greifswald", "Hertha"]].forEach(([b, a], k) => {
+    const B = T(b), A = T(a);
+    const grey = el("path", { d: B.path, class: "team", fill: "#7a7f84", opacity: 0 }, gO);
+    const over = el("path", { d: B.path, class: "team", fill: A.color, opacity: 0 }, gO);
+    const t0 = capAt("lose", "verschwindet", .8) + k * .25;
+    tl.to(grey, { opacity: 1, duration: .2 }, t0 - .5);
+    tl.to(tBadge[B.i], { scale: 0, duration: .3, ease: "back.in(2)" }, t0);
+    tl.to(over, { opacity: 1, duration: .35 }, t0 + .15);
+  });
+
+  // ---------- Szene 8: Am Ende einer ----------
+  const tE = S.end.start;
+  title(tE, "Am Ende", "bleibt nur einer");
+  tl.to("#mapg", { scale: 1, svgOrigin: ZO, duration: .5, ease: "power2.inOut" }, tE);
+  tl.to("#goldmap", { opacity: 1, duration: .6 }, tE + .5);
+  tl.to(Object.values(tBadge), { scale: 0, duration: .3, stagger: .005 }, tE + .5);
+  gsap.set("#trophy", { x: 540, y: 960, scale: .3, transformOrigin: "50% 50%" });
+  tl.to("#trophy", { opacity: 1, scale: 1.25, duration: .4, ease: "back.out(2)" }, tE + 1.0);
+  const tW = capAt("end", "wird", 1.6);
+  title(tW, "Wird es", "deiner?");
+  tl.to("#trophy", { scale: 1.4, duration: .15, yoyo: true, repeat: 1 }, tW + .3);
+
+  // ---------- Szene 9: CTA ----------
+  const tC = S.cta.start;
+  title(tC, "Schreib", "deinen Verein");
+  tl.to(["#trophy"], { opacity: 0, duration: .25 }, tC);
+  tl.to("#goldmap", { opacity: 0, duration: .4 }, tC);
+  tl.to(Object.values(tBadge), { scale: 1, duration: .3 }, tC + .1);
+  tl.to("#dimmer", { opacity: 1, duration: .3 }, tC + .1);
+  const big = document.createElement("div"); big.className = "ccard"; big.style.top = "860px";
+  big.innerHTML = `<div class="av" style="background:#0a3f86">P</div><div class="user">@paul_hsv</div><div class="txt">HSV!! 🔷</div>
+    <svg class="crest" viewBox="-30 -30 60 60"><circle r="29" fill="#fff" stroke="#dde3e8" stroke-width="2"/><circle r="24" fill="#0a3f86"/><circle r="13" fill="none" stroke="#fff" stroke-width="5"/></svg>`;
+  $("#cards").appendChild(big);
+  tl.fromTo(big, { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: .25, ease: "back.out(2)", immediateRender: false }, tC + .2);
+  const tM = capAt("cta", "markier", 1.8);
+  title(tM, "Markier", "deine Freunde");
+  tl.set(big.querySelector(".txt"), { opacity: 0 }, tM);
+  const tagged = document.createElement("div"); tagged.className = "txt"; tagged.innerHTML = 'HSV! <span class="at">@max @jonas @lea</span>';
+  tagged.style.opacity = 0; big.appendChild(tagged);
+  tl.fromTo(tagged, { opacity: 0 }, { opacity: 1, duration: .15, immediateRender: false }, tM);
+  const tFo = capAt("cta", "folg", 3.2);
+  title(tFo, "Folg", "@Kickreich");
+  tl.to(big, { opacity: 0, duration: .2 }, tFo);
+  tl.fromTo("#pcard", { opacity: 0, scale: .85 }, { opacity: 1, scale: 1, duration: .3, ease: "back.out(2)", immediateRender: false }, tFo);
+  tl.fromTo("#fbtn .f1", { opacity: 0 }, { opacity: 1, duration: .2, immediateRender: false }, tFo + .1);
+  tl.to("#fbtn", { scale: .9, duration: .1, yoyo: true, repeat: 1 }, tFo + 1.2);
+  tl.set("#fbtn .f1", { opacity: 0 }, tFo + 1.3); tl.set("#fbtn .f2", { opacity: 1 }, tFo + 1.3);
+  title(S.cta.end + .1, "Runde 1", "startet bald", true);
+
+  tl.set({}, {}, window.TOTAL);
+  window.__timelines = window.__timelines || {};
+  window.__timelines["main"] = tl;
+  tl.seek(0);
+})();
+</script>
+</body>
+</html>

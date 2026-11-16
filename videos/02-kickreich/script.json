@@ -1,0 +1,21 @@
+{
+  "lead_in": 0.2,
+  "tail": 1.2,
+  "length_scale": 0.82,
+  "noise_scale": 0.85,
+  "noise_w": 1.0,
+  "pitch": 1.5,
+  "colors": {"land": "y", "kickreich": "y", "soldat": "y", "soldaten": "y", "zwei": "y", "truppen": "y", "front": "y", "farbe": "y", "verschwindet": "y", "einer": "y", "kommentare": "y", "freunde": "y", "deinen": "y", "du": "y"},
+  "segments": [
+    {"id": "hook",   "text": "Was wäre, wenn jeder Fußballverein sein eigenes Land hätte?", "pause": 0.2},
+    {"id": "map",    "text": "Siebenundsechzig Vereine. Jeder regiert seine Region. Willkommen im Kickreich!", "pause": 0.2},
+    {"id": "army",   "text": "Ab jetzt wird erobert. Und die Armee deines Vereins bist du!", "pause": 0.15},
+    {"id": "vote",   "text": "Jeder Kommentar schickt einen Soldaten an die Front.", "pause": 0.1},
+    {"id": "follow", "text": "Und wenn du folgst, schickst du zwei!", "pause": 0.2},
+    {"id": "round",  "text": "Jede Runde zieht der Verein mit den meisten Truppen gegen seinen Nachbarn.", "pause": 0.1},
+    {"id": "win",    "text": "Wer gewinnt, färbt das Gebiet in seine Farbe.", "pause": 0.1},
+    {"id": "lose",   "text": "Wer keine Truppen hat, verschwindet von der Karte.", "pause": 0.15},
+    {"id": "end",    "text": "Bis am Ende nur noch einer übrig ist. Wird es deiner?", "pause": 0.25},
+    {"id": "cta",    "text": "Schreib deinen Verein in die Kommentare, markier deine Freunde und folg Kickreich für Runde eins!", "pause": 0.1}
+  ]
+}

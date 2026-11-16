@@ -5,6 +5,8 @@ description: Erstellt ein deutsches TikTok-Erklärvideo (9:16) im „Stil B“ �
 
 # TikTok-Video im Stil B (deutsch, HyperFrames)
 
+> **Hinweis:** Das aktuelle Hauptformat ist jetzt `tiktok-kartenkampf`. Stil B nur noch verwenden, wenn der Nutzer es ausdrücklich möchte.
+
 Alle Videos sind **immer auf Deutsch**, Hochformat 1080×1920, 30 fps, und werden **komplett im Code** gebaut.
 Vorlage war „Rennen vs. Gehen im Regen“. Das erste fertige Beispiel liegt in `videos/01-elfmeter/`.
 Kopiere es als Ausgangspunkt und lies es, bevor du ein neues Video baust.
