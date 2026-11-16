@@ -1,0 +1,24 @@
+{
+  "runde": 0,
+  "quelle": "Kommentare unter Video 1 (Ankündigung), ca. 15 h nach Upload",
+  "regeln": "1 Stimme pro Person; Follower zählen doppelt (wie in Video 1 angekündigt)",
+  "stimmen": [
+    {"user": "Lukas", "verein": "Osnabrück", "follower": false},
+    {"user": "mia", "verein": "Osnabrück", "follower": false},
+    {"user": "Lebenziel Gaming", "verein": "Osnabrück", "follower": false},
+    {"user": "saimon", "verein": "Hansa", "follower": true},
+    {"user": "knoxe_bob", "verein": "Hansa", "follower": false, "notiz": "Spam, treuester Krieger"},
+    {"user": "Ht2pJ4s0n", "verein": "Dynamo", "follower": true},
+    {"user": "SGD", "verein": "Dynamo", "follower": false, "notiz": "nur Bild"},
+    {"user": "Malsikik", "verein": "Bayern", "follower": true},
+    {"user": "limitiert_flame", "verein": "Eintracht", "follower": true, "notiz": "nannte auch Waldhof, erster Verein zählt"},
+    {"user": "Jayden", "verein": "Duisburg", "follower": true, "notiz": "erster Kommentar"},
+    {"user": "Fabi_Rgb", "verein": "Jahn", "follower": true},
+    {"user": "Free Republik of Mielanistan", "verein": "Zwickau", "follower": true, "notiz": "3 Kommentare"},
+    {"user": "Moritz.cmz", "verein": "Chemnitz", "follower": false},
+    {"user": "User 67", "verein": "Fürth", "follower": false},
+    {"user": "JF13PL", "verein": "Erfurt", "follower": false},
+    {"user": "Lenn", "verein": "KSC", "follower": false, "notiz": "2 Kommentare"},
+    {"user": "unbekannt", "verein": "Mainz", "follower": false}
+  ]
+}
