@@ -16,7 +16,24 @@ Name des Spiels: **Kickreich** (Handle-Platzhalter `@kickreich`, auswechselbar i
 - **Keine echten Vereinswappen.** Jeder Verein bekommt ein eigenes rundes Badge in seinen Vereinsfarben: weißer Rand, Fläche in Farbe 1, Ring in Farbe 2. Vereinsnamen als Text sind erlaubt.
 - Nutzernamen in Kommentar-Karten sind ausgedacht und neutral.
 
-## Aufbau (Ankündigungsvideo, ~30 s)
+
+## PFLICHT-AUFBAU für jedes Video (aus der Analyse von Video 1)
+Video 1 hatte 872 Aufrufe, Ø 7,6 s Wiedergabezeit, 3,9 % bis zum Ende, und die meisten Zuschauer stiegen bei 0:01 aus.
+Gleichzeitig kamen 2,4 % Kommentare. Das Spiel funktioniert also, aber der Einstieg war zu ruhig: graue Karte, abstrakte Frage.
+Daraus gelten diese Regeln:
+- **Länge 20–25 s**, nicht länger.
+- **0–2 s, Hook mit Action:** Die Karte ist sofort bunt, die Kamera zoomt auf ein Duell, dazu ein Pfeil und ein Konflikt-Satz („Dortmund greift Schalke an!“). Kein grauer Start, keine Was-wäre-wenn-Frage.
+- **2–8 s, Spielerklärung in 4 kurzen Sätzen.** Sie kommt in JEDES Video, weil neue Zuschauer fast nur über die For-You-Seite kommen:
+  1. „Jeder Verein regiert seine Region.“ (Karte blinkt)
+  2. „Jeder Kommentar ist ein Soldat für deinen Verein.“ (Kommentar-Karte +1 ⚔)
+  3. „Likes auf deinen Kommentar zählen extra.“ (Herz +1)
+  4. „Wer gewinnt, schnappt sich das Gebiet. Am Ende bleibt einer.“ (Gebiet färbt sich, Pokal blitzt)
+- **8–17 s:** aktueller Stand oder Runde mit echten Zahlen aus den Kommentaren.
+- **17–22 s, Aufruf:** Verein kommentieren, Freunde markieren, folgen. Dazu ein Ziel („Runde 1 bei 100 Kommentaren“).
+- Die Regel-Pill oben („KICKREICH · 1 KOMMENTAR = 1 SOLDAT“) bleibt das ganze Video über sichtbar.
+- Regel-Änderung: Statt „Folgen zählt doppelt“ gilt jetzt „Likes auf deinen Kommentar = Extra-Soldaten“. Das ist zählbar und bringt mehr Likes.
+
+## Aufbau des ersten Ankündigungsvideos (veraltet, nur als Referenz)
 | Segment | Text (Beispiel) | Visual |
 |---|---|---|
 | hook | „Was wäre, wenn jeder Fußballverein sein eigenes Land hätte?“ | graue Kreiskarte, Badges ploppen nacheinander auf |
