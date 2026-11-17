@@ -60,3 +60,16 @@ Framing tips:
 - A second voice is fine for one key line (segment `"voice": "af_heart"`); `voice_en.py` supports per-segment `voice` and `speed`.
 - Music sections per story go in `music.json` (mystery → hope → dark → end), then run `scripts/music.py`.
 - First-person hooks ("…except me") are strong: an immediate conflict and a character the viewer identifies with.
+
+## Performance log & rules derived from it
+| Video | Views | Full watch | Likes | Comments / Follows | Notes |
+|---|---|---|---|---|---|
+| The Number (77 s) | 2.9K / 4 h | 27.3 % | 5.0 % | 1 / 5 | visible rule (number over head) = mystery the whole time |
+| Except me (57 s) | 891 / 12 h | 9.8 % | 8.8 % | 0 / 0 | invisible rule, montage middle (17–31 s), stakes only from 32 s, twist at 46 s |
+
+Rules from this:
+1. **The rule must be VISIBLE on screen the whole time** (number, shadow, color, object). Invisible rules (lying) lose viewers.
+2. **Open loop within the first 6 s:** right after the hook, one sentence that promises the ending ("…it worked on everyone. Except the one person who mattered.").
+3. **No list or montage middles.** Every beat must raise the stakes or add a clue. Target 45–60 s.
+4. **Stakes and main characters introduced by about 15 s.** First twist hint by about 50 % of the runtime.
+5. A small on-screen "Wait for the ending 👀" pill around 3–6 s, plus the end question and follow card.
