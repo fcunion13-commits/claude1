@@ -2,6 +2,7 @@
 import {
   THREE, W, H, clamp, lerp, ease, easeOut, back, v3, srand, rnd, mat, rbox, box, canvasTex, redraw, roundRect, textPlane,
   makeChar, pose, makeLabel, baseScene, ground, room, house, tree, sign, screen, skyTex,
+  chair, sitOn, pine, car, streetlamp, fence, mailbox, snowman, bench, chimneySmoke, townsfolk, decorateLivingRoom,
 } from "../../../.claude/skills/tiktok-in-this-town/scripts/lib3d.js";
 import { Reflector } from "three/examples/jsm/objects/Reflector.js";
 
@@ -46,6 +47,19 @@ const homes = [];
 [[-6, -6, "#c96f53", "#6b3a2a"], [6, -6, "#6f8fc9", "#2f4a7a"], [-6, 4, "#d9b26a", "#7a5a2a"], [7, 4, "#9fc96f", "#3a6a2f"], [12, -14, "#c9a0d9", "#5a3a7a"]].forEach(([x, z, w_, r_]) => { const h = house(town, x, z, { wall: w_, roof: "#ffffff", lit: true, ry: x < 0 ? .4 : -.4 }); homes.push(h); });
 srand(12); for (let i = 0; i < 16; i++) { const side = i % 2 ? 1 : -1; const t = tree(town, side * (11 + rnd() * 10), -16 - rnd() * 26, .9 + rnd() * .5); t.children[1].material = mat("#e9f2f7"); }
 const snowT = snowfall(town, 30, 320, 4);
+// ---- town details ----
+const smokes = homes.map((h, i) => chimneySmoke(town, h, .7, -.4, 3.4));
+[[-14, -2, "#e6b89c", "#ffffff", Math.PI / 2], [-14, 6, "#9cc5e6", "#ffffff", Math.PI / 2], [14, -2, "#e6d29c", "#ffffff", -Math.PI / 2], [14, 7, "#c59ce6", "#ffffff", -Math.PI / 2], [-13, -12, "#9ce6b8", "#ffffff", .9], [-7, 13, "#e69c9c", "#ffffff", Math.PI], [7, 13, "#9cb8e6", "#ffffff", Math.PI]].forEach(([x, z, w_, r_, ry]) => { const h = house(town, x, z, { wall: w_, roof: r_, lit: true, ry }); smokes.push(chimneySmoke(town, h, .7, -.4, 3.4)); });
+[[-10.5, -18], [10.5, -19], [-12, -26], [12.5, -27], [-15, -33], [15, -34], [-9.5, -38], [9.5, -39], [-17, 0], [17, 2], [-17, 10], [17, 12], [-4, 17], [4, 17.5], [-11, 14], [11, 15]].forEach(([x, z], i) => pine(town, x, z, 1 + (i % 3) * .2));
+car(town, 2.8, 2, 0, "#c0392b"); car(town, 3, -4.5, Math.PI, "#2f5fa0"); car(town, -2.8, 10, 0, "#f1c40f");
+[[-3.2, 7], [3.4, 7], [-3.2, -1], [3.4, -1], [-3.2, -9], [3.4, -9], [-2.6, -16], [2.6, -16]].forEach(([x, z]) => streetlamp(town, x, z));
+fence(town, -8.8, 7.6, 4, 0); fence(town, 8.8, 7.6, 4, 0); fence(town, -8.8, -2.4, 4, 0); fence(town, 8.8, -2.4, 4, 0);
+mailbox(town, -4.2, 7.4, 0); mailbox(town, 4.4, 7.4, 0); mailbox(town, -4.2, -2.6, 0);
+snowman(town, 4.6, 9.5, -.5); snowman(town, -9.5, -6, .6);
+bench(town, -6.5, -21, .3, true); bench(town, 6, -22, -.4, true);
+{ const dock = box(1.4, .12, 3.2, "#7a5230"); dock.position.set(5.5, .1, -25.5); dock.rotation.y = -.5; town.add(dock); for (let i = 0; i < 9; i++) { const r = box(.05, .6 + (i % 3) * .2, .05, "#8a7a4a"); r.position.set(-6.8 + i * .25, .3, -26 + (i % 2) * .4); town.add(r); } }
+const road2 = box(26, .02, 3.4, "#d6dce2"); road2.position.set(0, .011, 9.6); road2.receiveShadow = true; town.add(road2);
+const npcT = townsfolk(town, 9, [[4.4, 5, 4.4, -8], [-9.5, 9, 9.5, 9], [9.5, 10.2, -9.5, 10.2], [-3.9, 5, -3.9, -6], [10, -4, 10, 7], [-10.5, 1, -10.5, -9], [11, 1.5, 10, 2.2], [-11.5, 2.2, -10.8, 1.6], [4.8, 2, 4.8, -10]], 21);
 // pond (with true reflection, visitors excluded)
 const pondPos = new THREE.Vector3(0, 0, -30);
 const ice = new Reflector(new THREE.CircleGeometry(7, 48), { textureWidth: 512, textureHeight: 1024, color: 0x9ab8c8 });
@@ -78,7 +92,11 @@ const home = baseScene({ sky: ["#fff", "#fff"], sun: 1.1, amb: 1.0 });
 room(home, { w: 11, d: 9, h: 4, wall: "#f0e2c8", floor: "#a87a52" });
 const winH = new THREE.Mesh(new THREE.PlaneGeometry(1.8, 1.3), new THREE.MeshBasicMaterial({ color: "#dfefff" })); winH.position.set(2.8, 2.2, -4.38); home.add(winH);
 { const fr = rbox(2, 1.5, .08, .02, "#ffffff"); fr.position.set(2.8, 2.2, -4.42); home.add(fr); }
-const table = rbox(2.4, .12, 1.3, .04, "#c69c6d"); table.position.set(1.2, .95, -.6); home.add(table); for (const [x, z] of [[-1, -.5], [1, -.5], [-1, .5], [1, .5]]) { const l = box(.1, .95, .1, "#7a5230"); l.position.set(1.2 + x, .47, -.6 + z); home.add(l); }
+const table = rbox(1.7, .12, 1.3, .04, "#c69c6d"); table.position.set(1.2, .95, -.6); home.add(table); for (const [x, z] of [[-.7, -.5], [.7, -.5], [-.7, .5], [.7, .5]]) { const l = box(.1, .95, .1, "#7a5230"); l.position.set(1.2 + x, .47, -.6 + z); home.add(l); }
+decorateLivingRoom(home, { w: 11, d: 9, h: 4 });
+const SEATS = { left: [-.3, -.6, Math.PI / 2], right: [2.7, -.6, -Math.PI / 2], back: [1.2, -1.85, 0] };
+Object.values(SEATS).forEach(([x, z, ry]) => chair(home, x, z, ry, .48));
+const seat = (c, k, t) => { const [x, z, ry] = SEATS[k]; c.root.visible = true; c.root.position.set(x, 0, z); c.root.rotation.y = ry; pose(c, "idle", t); sitOn(c, .5); };
 const pancakes = new THREE.Group(); pancakes.position.set(1.2, 1.02, -.6); home.add(pancakes);
 { const pl = new THREE.Mesh(new THREE.CylinderGeometry(.34, .3, .04, 24), mat("#ffffff")); pancakes.add(pl); for (let i = 0; i < 5; i++) { const p = new THREE.Mesh(new THREE.CylinderGeometry(.27, .27, .05, 24), mat("#e8b56a")); p.position.y = .05 + i * .055; pancakes.add(p); }
   srand(9); for (let i = 0; i < 9; i++) { const c = new THREE.Mesh(new THREE.SphereGeometry(.028, 6, 4), mat("#4a2a14")); c.position.set((rnd() - .5) * .3, .33, (rnd() - .5) * .3); pancakes.add(c); } }
@@ -128,12 +146,12 @@ shot(0, town, C([0, 6, 16], [0, 1.5, 0]), C([0, 3, 10], [0, 1.4, 1]), (lt, t) =>
   womA.setExpr(k > .8 ? "laugh" : "shock"); kidA.setExpr(k > .8 ? "laugh" : "shock");
 });
 // rule1: eat, laugh, hug (interior)
-shot(S.rule1.start, home, C([2.2, 2.4, 4.4], [1.2, 1.2, -.6]), C([1.8, 2.1, 3.4], [1.2, 1.3, -.6]), (lt, t) => {
+shot(S.rule1.start, home, C([1.2, 3.2, 6.2], [1.2, .9, -.8]), C([1.2, 2.9, 5.4], [1.2, .95, -.8]), (lt, t) => {
   hideHome(); sheet.visible = sheetTop.visible = false; tvOff.visible = true; paper.visible = false; pancakes.visible = true;
-  place(gpaH, 1.2, -1.5, 0); pose(gpaH, t > at("rule1", "laugh") ? "laugh" : "sit", t); gpaH.setExpr("laugh");
-  place(womH, .1, -.6, Math.PI / 2); pose(womH, "sit", t); womH.setExpr("laugh");
-  place(kidH, 2.3, -.6, -Math.PI / 2); pose(kidH, t > at("rule1", "hug") ? "hold" : "sit", t); kidH.setExpr("laugh");
-  if (t > at("rule1", "hug")) { kidH.root.position.set(1.6, 0, -1.1); kidH.root.rotation.y = Math.PI * .8; }
+  seat(gpaH, "back", t); gpaH.setExpr("laugh"); if (t > at("rule1", "laugh")) gpaH.rig.rotation.x = -.12 + Math.sin(t * 14) * .05;
+  seat(womH, "left", t); womH.setExpr("laugh");
+  if (t > at("rule1", "hug")) { place(kidH, 1.2, -2.35, 0); pose(kidH, "hold", t); kidH.arms.forEach(a => a.rotation.x = -1.6); } else seat(kidH, "right", t);
+  kidH.setExpr("laugh");
 });
 // rule2: mirror without the visitor
 shot(S.rule2.start, home, C([-.6, 1.7, .4], [-3.2, 1.45, -4.1]), C([-1.0, 1.65, -.3], [-3.2, 1.45, -4.1]), (lt, t) => {
@@ -188,10 +206,10 @@ shot(at("morning", "mom", 4.5) - .1, home, C([2.6, 2.2, 2.6], [1.2, 1.1, -.6]), 
   place(momH, 1.2, -1.7, 0); pose(momH, "hold", t); momH.setExpr(t > at("morning", "nobody", 7.5) ? "sad" : "smile");
 });
 // knew
-shot(S.knew.start, home, C([2.6, 1.8, 2.8], [1.2, 1.2, -.6]), C([2.2, 1.7, 2.2], [1.2, 1.25, -.6]), (lt, t) => {
+shot(S.knew.start, home, C([1.2, 2.8, 5.8], [1.2, .9, -.7]), C([1.2, 2.6, 5.0], [1.2, .95, -.7]), (lt, t) => {
   hideHome(); pancakes.visible = true; paper.visible = true;
-  place(lilyH, 2.2, -.6, -Math.PI / 2); pose(lilyH, "sit", t); lilyH.setExpr("laugh");
-  place(meH, .2, -.6, Math.PI / 2); pose(meH, "sit", t); meH.setExpr(t > at("knew", "swore", 2) ? "angry" : "flat");
+  seat(lilyH, "right", t); lilyH.setExpr("laugh");
+  seat(meH, "left", t); meH.setExpr(t > at("knew", "swore", 2) ? "angry" : "flat");
 });
 // hide: paper, TV, onions
 shot(S.hide.start, home, C([2.4, 2.2, 3], [2.6, 1.2, -1.4]), C([2, 2, 2.4], [2.8, 1.3, -1.6]), (lt, t) => {
@@ -294,6 +312,7 @@ function draw(t) {
   const k = ease((t - s.t0) / Math.max(.01, t1 - s.t0));
   cam.position.copy(v3(s.from.p).lerp(v3(s.to.p), k)); cam.lookAt(v3(s.from.l).lerp(v3(s.to.l), k));
   [...allTown, ...allHome].forEach(c => { c.head.rotation.set(0, 0, 0); });
+  if (s.sc === town) { smokes.forEach(f => f(t)); npcT(t, true); }
   s.update(t - s.t0, t);
   renderer.render(s.sc, cam);
 }

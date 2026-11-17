@@ -242,3 +242,122 @@ export function confetti(sc, n = 160, area = [8, 6, 4], seed = 3) {
   }
   return (t) => ps.forEach(p => { const y = p.y0 - t * p.sp * 2; p.m.position.set(p.x + Math.sin(t * 2 + p.ph) * .3, y, p.z); p.m.rotation.set(t * p.rs, t * p.rs * .7, 0); p.m.visible = y > -.2 && t > 0; });
 }
+
+// =====================================================================
+// PROPS – reusable detail pieces (added after "The Visit" feedback: scenes felt empty)
+// =====================================================================
+export function chair(sc, x, z, ry = 0, seat = .48, color = "#8b5a2b") {
+  const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = ry; sc.add(g);
+  const s = rbox(.55, .07, .55, .02, color); s.position.y = seat; g.add(s);
+  const b = rbox(.55, .6, .07, .02, color); b.position.set(0, seat + .32, -.26); g.add(b);
+  for (const [lx, lz] of [[-.22, -.22], [.22, -.22], [-.22, .22], [.22, .22]]) { const l = box(.05, seat, .05, color); l.position.set(lx, seat / 2, lz); g.add(l); }
+  return g;
+}
+// put a character on a chair (seat height in world units); call after pose()
+export function sitOn(ch, seat = .48) {
+  const sc_ = ch.opts.scale || 1; const [lL, lR] = ch.legs;
+  lL.rotation.x = -1.5; lR.rotation.x = -1.5; ch.rig.position.y = seat / sc_ - .5;
+  ch.arms[0].rotation.x = -.9; ch.arms[1].rotation.x = -.9;
+}
+export function pine(sc, x, z, s = 1, snow = true) {
+  const g = new THREE.Group(); g.position.set(x, 0, z); g.scale.setScalar(s); sc.add(g);
+  const tr = box(.3, .8, .3, "#6b4423"); tr.position.y = .4; g.add(tr);
+  [[1.3, 1.4, 1.2], [1.0, 1.2, 2.0], [.7, 1.0, 2.7]].forEach(([r, h, y]) => { const c = new THREE.Mesh(new THREE.ConeGeometry(r, h, 8), mat("#2f6b45")); c.position.y = y; c.castShadow = true; g.add(c);
+    if (snow) { const sn = new THREE.Mesh(new THREE.ConeGeometry(r * .62, h * .45, 8), mat("#f4f8fb")); sn.position.y = y + h * .3; g.add(sn); } });
+  return g;
+}
+export function car(sc, x, z, ry = 0, color = "#c0392b", snow = true) {
+  const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = ry; sc.add(g);
+  const b = rbox(1.6, .55, 3.2, .18, color); b.position.y = .55; g.add(b);
+  const cab = rbox(1.4, .5, 1.7, .16, color); cab.position.set(0, 1.05, -.2); g.add(cab);
+  const gl = mat("#9fc6dd", { roughness: .15 }); const w1 = box(1.3, .38, .05, gl); w1.position.set(0, 1.05, .66); g.add(w1); const w2 = w1.clone(); w2.position.z = -1.06; g.add(w2);
+  for (const sx of [-.8, .8]) for (const sz of [-1, 1]) { const wh = new THREE.Mesh(new THREE.CylinderGeometry(.3, .3, .22, 16), mat("#1b1b1b")); wh.rotation.z = Math.PI / 2; wh.position.set(sx, .3, sz); g.add(wh); }
+  for (const sx of [-.5, .5]) { const hl = box(.25, .12, .04, new THREE.MeshStandardMaterial({ color: "#fff6d0", emissive: "#ffe9a0", emissiveIntensity: .6 })); hl.position.set(sx, .62, 1.61); g.add(hl); }
+  if (snow) { const s1 = rbox(1.35, .12, 1.5, .06, "#ffffff"); s1.position.set(0, 1.36, -.2); g.add(s1); const s2 = rbox(1.5, .08, .8, .04, "#ffffff"); s2.position.set(0, .86, 1.15); g.add(s2); }
+  return g;
+}
+export function streetlamp(sc, x, z, on = true) {
+  const g = new THREE.Group(); g.position.set(x, 0, z); sc.add(g);
+  const p = box(.12, 3.2, .12, "#2b2f36"); p.position.y = 1.6; g.add(p); const top = box(.4, .3, .4, "#2b2f36"); top.position.y = 3.3; g.add(top);
+  const bulb = new THREE.Mesh(new THREE.BoxGeometry(.3, .22, .3), new THREE.MeshStandardMaterial({ color: "#fff3c0", emissive: "#ffd27a", emissiveIntensity: on ? 1.6 : .1 })); bulb.position.y = 3.08; g.add(bulb);
+  g.userData.bulb = bulb; return g;
+}
+export function fence(sc, x, z, len = 4, ry = 0, color = "#f2f2f2") {
+  const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = ry; sc.add(g);
+  for (let i = 0; i <= len / .5; i++) { const p = rbox(.1, .8, .06, .02, color); p.position.set(-len / 2 + i * .5, .4, 0); g.add(p); }
+  for (const y of [.3, .6]) { const r = box(len, .06, .05, color); r.position.set(0, y, -.03); g.add(r); }
+  return g;
+}
+export function mailbox(sc, x, z, ry = 0) { const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = ry; sc.add(g); const p = box(.1, 1, .1, "#5a3a1a"); p.position.y = .5; g.add(p); const b = rbox(.3, .28, .5, .1, "#2f5fa0"); b.position.y = 1.1; g.add(b); const f = box(.04, .2, .06, "#e63946"); f.position.set(.17, 1.2, .1); g.add(f); return g; }
+export function snowman(sc, x, z, ry = 0) {
+  const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = ry; sc.add(g);
+  [[.5, .45], [.36, 1.1], [.26, 1.6]].forEach(([r, y]) => { const s = new THREE.Mesh(new THREE.SphereGeometry(r, 20, 14), mat("#ffffff")); s.position.y = y; s.castShadow = true; g.add(s); });
+  const n = new THREE.Mesh(new THREE.ConeGeometry(.06, .3, 10), mat("#ff8c1a")); n.rotation.x = Math.PI / 2; n.position.set(0, 1.6, .38); g.add(n);
+  for (const sx of [-.09, .09]) { const e = new THREE.Mesh(new THREE.SphereGeometry(.035, 8, 6), mat("#111")); e.position.set(sx, 1.7, .23); g.add(e); }
+  const hat = new THREE.Mesh(new THREE.CylinderGeometry(.2, .2, .3, 16), mat("#111")); hat.position.y = 1.95; g.add(hat); const br = new THREE.Mesh(new THREE.CylinderGeometry(.3, .3, .04, 16), mat("#111")); br.position.y = 1.82; g.add(br);
+  const sf = rbox(.5, .1, .5, .05, "#e63946"); sf.position.y = 1.36; g.add(sf);
+  return g;
+}
+export function bench(sc, x, z, ry = 0, snow = false) {
+  const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = ry; sc.add(g);
+  const s = rbox(1.8, .1, .5, .03, "#8b5a2b"); s.position.y = .5; g.add(s); const b = rbox(1.8, .45, .08, .03, "#8b5a2b"); b.position.set(0, .85, -.22); g.add(b);
+  for (const sx of [-.75, .75]) { const l = box(.08, .5, .45, "#333"); l.position.set(sx, .25, 0); g.add(l); }
+  if (snow) { const sn = rbox(1.7, .08, .45, .04, "#ffffff"); sn.position.y = .58; g.add(sn); }
+  return g;
+}
+// chimney + rising smoke on a house group made by house(); returns update(t)
+export function chimneySmoke(sc, houseGroup, dx = .8, dz = 0, top = 3.6) {
+  const c = box(.45, 1.1, .45, "#7a4a3a"); c.position.set(dx, top - .2, dz); houseGroup.add(c);
+  const puffs = []; for (let i = 0; i < 6; i++) { const p = new THREE.Mesh(new THREE.SphereGeometry(.22, 10, 8), new THREE.MeshStandardMaterial({ color: "#d9dde3", transparent: true, opacity: .55, depthWrite: false })); houseGroup.add(p); puffs.push(p); }
+  return (t) => puffs.forEach((p, i) => { const k = ((t * .25 + i / 6) % 1); p.position.set(dx + Math.sin(k * 6 + i) * .25 + k * .6, top + .4 + k * 2.4, dz); p.scale.setScalar(.6 + k * 1.6); p.material.opacity = .55 * (1 - k); });
+}
+// background townsfolk that walk back and forth on a line; returns update(t)
+export function townsfolk(sc, n, area, seed = 21, colors) {
+  srand(seed); const cols = colors || ["#ff7b54", "#6c63ff", "#2ec4b6", "#ffbe0b", "#ef476f", "#06d6a0", "#118ab2", "#8d6e63"];
+  const SK = ["#f2c9a0", "#c98f63", "#8d5a3b", "#f7d7b8", "#e0ac7e"];
+  const ppl = [];
+  for (let i = 0; i < n; i++) {
+    const c = makeChar({ shirt: cols[i % cols.length], pants: "#2b2d42", skin: SK[i % 5], hair: ["#2a1d14", "#e3b04b", "#7a3e1d", "#111", "#b0b0b0"][i % 5], hairStyle: ["short", "long", "bun", "spiky"][i % 4], scale: i % 4 === 3 ? .7 : 1 });
+    sc.add(c.root);
+    const [x0, z0, x1, z1] = area[i % area.length];
+    ppl.push({ c, x0, z0, x1, z1, sp: .08 + rnd() * .08, ph: rnd(), talk: rnd() < .3 });
+  }
+  return (t, visible = true) => ppl.forEach(p => {
+    p.c.root.visible = visible; if (!visible) return;
+    if (p.talk) { p.c.root.position.set(p.x0, 0, p.z0); p.c.root.rotation.y = Math.atan2(p.x1 - p.x0, p.z1 - p.z0); pose(p.c, "laugh", t); return; }
+    const u = (t * p.sp + p.ph) % 2, k = u < 1 ? u : 2 - u, dir = u < 1 ? 1 : -1;
+    p.c.root.position.set(lerp(p.x0, p.x1, k), 0, lerp(p.z0, p.z1, k));
+    p.c.root.rotation.y = Math.atan2((p.x1 - p.x0) * dir, (p.z1 - p.z0) * dir); pose(p.c, "walk", t + p.ph * 5);
+  });
+}
+// interior decoration for a room built with room(): fireplace, rug, couch, shelf, frames, plant, floor lamp, counter, curtains
+export function decorateLivingRoom(sc, { w = 11, d = 9, h = 4 } = {}) {
+  const back = -d / 2 + .12, left = -w / 2 + .12, right = w / 2 - .12;
+  const rug = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 2.4), mat("#b5523b")); rug.rotation.x = -Math.PI / 2; rug.position.set(-1.6, .012, .8); rug.receiveShadow = true; sc.add(rug);
+  const rug2 = new THREE.Mesh(new THREE.PlaneGeometry(3, 2), mat("#e8c07a")); rug2.rotation.x = -Math.PI / 2; rug2.position.set(-1.6, .014, .8); sc.add(rug2);
+  // fireplace on back wall
+  const fp = new THREE.Group(); fp.position.set(-.9, 0, back + .3); sc.add(fp);
+  const body = rbox(1.9, 1.5, .55, .04, "#8a6a5a"); body.position.y = .75; fp.add(body); const mantel = rbox(2.2, .12, .7, .03, "#5a3a2a"); mantel.position.y = 1.55; fp.add(mantel);
+  const hole = box(1.1, .8, .3, "#1a0f0a"); hole.position.set(0, .5, .14); fp.add(hole);
+  const fire = new THREE.Mesh(new THREE.ConeGeometry(.25, .5, 8), new THREE.MeshStandardMaterial({ color: "#ffb347", emissive: "#ff7a1a", emissiveIntensity: 2 })); fire.position.set(0, .4, .2); fp.add(fire);
+  const fireL = new THREE.PointLight("#ff9a4a", 6, 5); fireL.position.set(0, .8, .8); fp.add(fireL);
+  for (let i = 0; i < 3; i++) { const v = rbox(.12, .22 + i * .05, .12, .03, ["#3a6fd8", "#e63946", "#2ec4b6"][i]); v.position.set(-.7 + i * .25, 1.73 + i * .025, 0); fp.add(v); }
+  // couch
+  const couch = new THREE.Group(); couch.position.set(-1.6, 0, 2.3); couch.rotation.y = Math.PI; sc.add(couch);
+  { const s = rbox(2.4, .45, .95, .15, "#4a6fa5"); s.position.y = .35; couch.add(s); const b = rbox(2.4, .7, .25, .12, "#3f5f90"); b.position.set(0, .75, -.38); couch.add(b); for (const sx of [-1.15, 1.15]) { const a = rbox(.25, .6, .95, .1, "#3f5f90"); a.position.set(sx, .5, 0); couch.add(a); } const p1 = rbox(.45, .4, .14, .08, "#ffd23f"); p1.position.set(-.7, .7, -.2); couch.add(p1); }
+  // bookshelf on left wall
+  const sh = new THREE.Group(); sh.position.set(left + .25, 0, .8); sh.rotation.y = Math.PI / 2; sc.add(sh);
+  { const fr = rbox(1.6, 2.4, .4, .03, "#6b4423"); fr.position.y = 1.2; sh.add(fr); srand(3); for (let r = 0; r < 4; r++) { const pl = box(1.5, .05, .38, "#5a3a1a"); pl.position.set(0, .3 + r * .55, .02); sh.add(pl); for (let b = 0; b < 8; b++) { if (rnd() < .2) continue; const bk = box(.13, .3 + rnd() * .15, .26, ["#c0392b", "#2980b9", "#27ae60", "#f39c12", "#8e44ad", "#ecf0f1"][b % 6]); bk.position.set(-.6 + b * .17, .5 + r * .55, .05); sh.add(bk); } } }
+  // frames on back wall
+  [[1.6, 2.6, "#f7c6a3"], [2.6, 2.3, "#a3d5f7"], [-2.8, 2.5, "#c6f7a3"]].forEach(([x, y, c]) => { const f = rbox(.7, .55, .05, .02, "#5a3a1a"); f.position.set(x, y, back + .02); sc.add(f); const pic = box(.56, .41, .02, c); pic.position.set(x, y, back + .05); sc.add(pic); });
+  // plant + floor lamp
+  const pot = new THREE.Mesh(new THREE.CylinderGeometry(.22, .17, .4, 14), mat("#b5523b")); pot.position.set(right - .5, .2, back + .6); sc.add(pot);
+  for (let i = 0; i < 6; i++) { const lf = new THREE.Mesh(new THREE.SphereGeometry(.22, 10, 8), mat("#3f8f4f")); lf.position.set(right - .5 + Math.sin(i) * .15, .55 + i * .12, back + .6 + Math.cos(i) * .15); lf.scale.set(1, 1.5, 1); sc.add(lf); }
+  const lamp = new THREE.Group(); lamp.position.set(-3.2, 0, 2); sc.add(lamp); { const p = box(.06, 1.7, .06, "#333"); p.position.y = .85; lamp.add(p); const shd = new THREE.Mesh(new THREE.CylinderGeometry(.22, .32, .35, 16, 1, true), new THREE.MeshStandardMaterial({ color: "#fff1d6", emissive: "#ffd9a0", emissiveIntensity: .8, side: THREE.DoubleSide })); shd.position.y = 1.8; lamp.add(shd); }
+  // kitchen counter on right wall
+  const ct = new THREE.Group(); ct.position.set(right - .4, 0, -1.6); ct.rotation.y = -Math.PI / 2; sc.add(ct);
+  { const base = rbox(2.6, .9, .6, .03, "#e8e2d6"); base.position.y = .45; ct.add(base); const top = box(2.7, .06, .65, "#5a5a5a"); top.position.y = .93; ct.add(top); const st = box(.7, .02, .5, "#222"); st.position.set(-.6, .97, 0); ct.add(st); const pan = new THREE.Mesh(new THREE.CylinderGeometry(.2, .18, .06, 16), mat("#333")); pan.position.set(-.6, 1.01, 0); ct.add(pan); const ket = rbox(.25, .3, .2, .08, "#e63946"); ket.position.set(.6, 1.1, 0); ct.add(ket); }
+  // curtains around window area on back wall (x≈2.8)
+  for (const sx of [1.7, 3.9]) { const cu = rbox(.35, 1.8, .06, .05, "#c0392b"); cu.position.set(sx, 2.15, back + .08); sc.add(cu); }
+  return { fire, fireL };
+}
