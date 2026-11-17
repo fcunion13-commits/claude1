@@ -1,0 +1,31 @@
+{
+  "voice": "am_michael",
+  "speed": 1.08,
+  "lead_in": 0.2,
+  "tail": 1.6,
+  "segments": [
+    {"id": "hook",    "text": "In this town, when someone dies, they get one more day. We call it the Visit.", "pause": 0.3},
+    {"id": "rule1",   "text": "They come back at sunrise, and they leave at sunset. They eat, they laugh, they hug you, just like before.", "pause": 0.25},
+    {"id": "rule2",   "text": "But visitors don't show up in mirrors. Their footprints melt right out of the snow. And they never remember how they died.", "pause": 0.25},
+    {"id": "rule3",   "text": "And there's one rule. You never tell a visitor they're dead. If they figure it out, they vanish on the spot. No goodbye.", "pause": 0.25},
+    {"id": "rule4",   "text": "So on visit days, families cover every mirror, hide the newspaper, and smile way too much.", "pause": 0.35},
+    {"id": "intro",   "text": "I'm twelve. My little sister Lily is seven. Last winter, Lily fell through the ice on Miller Pond.", "pause": 0.35},
+    {"id": "morning", "text": "This morning, every mirror in our house was covered with a bedsheet. Dad called in sick. Mom made chocolate chip pancakes. Nobody had made those since the pond.", "pause": 0.25},
+    {"id": "knew",    "text": "So I knew today was Lily's visit. And I swore she would never find out.", "pause": 0.25},
+    {"id": "hide",    "text": "I hid the newspaper. I unplugged the TV. When she asked why Mom was crying, I said onions.", "pause": 0.25},
+    {"id": "day",     "text": "All day, Lily wouldn't let go of my hand. Outside, she walked behind me, stepping in my footprints, like she used to.", "pause": 0.2},
+    {"id": "dog",     "text": "Our dog Biscuit hid under the porch and whimpered every time we came close. And Dad kept staring at us, like he was trying to memorize a face.", "pause": 0.35},
+    {"id": "run",     "text": "At four o'clock, Lily let go of my hand and ran straight toward Miller Pond. I chased her through the snow, screaming her name. If she saw that pond, she would remember. And she would be gone.", "pause": 0.3},
+    {"id": "edge",    "text": "She stopped right at the edge, crying.", "pause": 0.3},
+    {"id": "lily1",   "text": "This is where you saved me. You pushed me up onto the ice... but you didn't come back up.", "voice": "af_heart", "speed": 1.0, "pause": 0.6},
+    {"id": "look",    "text": "I looked down at the frozen pond. Lily's reflection was there, crying. Next to her was nobody.", "pause": 0.3},
+    {"id": "prints",  "text": "I looked behind us. One set of footprints. Small ones. Lily wasn't stepping in my footprints. She was making them for me.", "pause": 0.4},
+    {"id": "realize", "text": "The mirrors. The pancakes. Dad memorizing a face. It was never Lily's visit. It was mine.", "pause": 0.45},
+    {"id": "why",     "text": "Why did you tell me, I whispered. Now I'll vanish.", "pause": 0.25},
+    {"id": "wipe",    "text": "She wiped her nose on her mitten.", "pause": 0.2},
+    {"id": "lily2",   "text": "The sun's going down anyway. And I never got to say thank you.", "voice": "af_heart", "speed": 1.0, "pause": 0.4},
+    {"id": "hug",     "text": "So I hugged her as hard as I could. Stay off the ice, I said. Forever. She laughed and cried at the same time.", "pause": 0.4},
+    {"id": "end",     "text": "Then the sun went down, and Lily walked home in her own footprints.", "pause": 0.6},
+    {"id": "cta",     "text": "Would you want one more day, if it was yours?", "pause": 0.1}
+  ]
+}

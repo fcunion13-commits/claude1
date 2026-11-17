@@ -57,19 +57,42 @@ script_words = " ".join(s["text"] for s in cfg["segments"]).split()
 segs, _ = m.transcribe(a16, language="en", word_timestamps=True,
                        initial_prompt=" ".join(s["text"] for s in cfg["segments"])[:800])
 heard = [w for s in segs for w in s.words]
-# align: replace whisper's spelling with the script words (same count expected; fall back to whisper text)
-words = []
+# align per segment with difflib; unmatched script words are interpolated inside their segment
+import difflib
 norm = lambda x: re.sub(r"[^a-z0-9]", "", x.lower())
-j = 0
-for hw in heard:
-    txt = hw.word.strip()
-    if j < len(script_words) and (norm(script_words[j]) == norm(txt) or norm(txt) in norm(script_words[j]) or norm(script_words[j]) in norm(txt)):
-        txt = script_words[j]; j += 1
-    elif j + 1 < len(script_words) and norm(script_words[j + 1]) == norm(txt):
-        txt = script_words[j + 1]; j += 2
-    words.append({"w": txt, "t0": round(hw.start, 3), "t1": round(hw.end, 3)})
-print(f"aligned {j}/{len(script_words)} script words, {len(words)} heard")
+words = []
+matched = 0
+for seg in cfg["segments"]:
+    st = seg_t[seg["id"]]
+    sw = seg["text"].split()
+    hw = [w for w in heard if st["start"] - .15 <= w.start <= st["end"] + .15]
+    times = [None] * len(sw)
+    sm = difflib.SequenceMatcher(None, [norm(x) for x in sw], [norm(w.word) for w in hw], autojunk=False)
+    for a, b, n in sm.get_matching_blocks():
+        for k in range(n):
+            times[a + k] = (hw[b + k].start, hw[b + k].end); matched += 1
+    # interpolate gaps by character weight between known anchors (segment edges as fallback)
+    s0, s1 = st["start"] + .05, st["end"] - .05
+    i = 0
+    while i < len(sw):
+        if times[i] is not None: i += 1; continue
+        j = i
+        while j < len(sw) and times[j] is None: j += 1
+        left = times[i - 1][1] if i > 0 else s0
+        right = times[j][0] if j < len(sw) else s1
+        if right <= left: right = left + .25 * (j - i)
+        wts = [len(x) + 2 for x in sw[i:j]]; tot = sum(wts); c = left
+        for k in range(i, j):
+            d = (right - left) * wts[k - i] / tot; times[k] = (c, c + d); c += d
+        i = j
+    for x, (a, b) in zip(sw, times):
+        words.append({"w": x, "t0": round(a, 3), "t1": round(b, 3)})
+print(f"aligned {matched}/{sum(len(s['text'].split()) for s in cfg['segments'])} script words, {len(heard)} heard")
 
+# enforce strictly increasing word times
+for i in range(1, len(words)):
+    if words[i]["t0"] <= words[i - 1]["t0"]: words[i]["t0"] = round(words[i - 1]["t0"] + .05, 3)
+    if words[i]["t1"] <= words[i]["t0"]: words[i]["t1"] = round(words[i]["t0"] + .12, 3)
 caps, cur = [], []
 for w in words:
     cur.append(w)
@@ -80,6 +103,8 @@ CAPS = []
 for i, c in enumerate(caps):
     t1 = caps[i + 1][0]["t0"] if i + 1 < len(caps) else c[-1]["t1"] + 0.3
     t1 = min(t1, c[-1]["t1"] + 0.6)
+    if i + 1 < len(caps): t1 = min(t1, caps[i + 1][0]["t0"])
+    t1 = max(t1, c[0]["t0"] + .12)
     CAPS.append({"t0": c[0]["t0"], "t1": round(t1, 3), "text": " ".join(x["w"] for x in c)})
 
 with open(os.path.join(proj, "timings.js"), "w", encoding="utf-8") as f:
