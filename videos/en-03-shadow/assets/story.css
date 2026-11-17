@@ -1,0 +1,27 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+#root { position: relative; width: 1080px; height: 1920px; overflow: hidden; font-family: "Inter", sans-serif; }
+#gl { position: absolute; inset: 0; width: 1080px; height: 1920px; }
+#caps { position: absolute; left: 0; right: 0; top: 1150px; height: 160px; }
+.cap { position: absolute; left: 30px; right: 30px; top: 0; text-align: center; opacity: 0; white-space: nowrap;
+  font: 900 84px/1.1 "Inter", sans-serif; color: #fff; letter-spacing: -.01em;
+  -webkit-text-stroke: 14px #000; paint-order: stroke fill;
+  text-shadow: 0 6px 0 rgba(0,0,0,.55); }
+.endq { position: absolute; left: 60px; right: 60px; top: 520px; text-align: center; opacity: 0;
+  font: 900 76px/1.1 "Inter", sans-serif; color: #fff; -webkit-text-stroke: 12px #000; paint-order: stroke fill; }
+.endq span { color: #ffd23f; }
+.follow { position: absolute; left: 50%; top: 1450px; transform: translateX(-50%); opacity: 0; padding: 18px 34px; border-radius: 40px;
+  background: #fe2c55; color: #fff; font: 900 44px "Inter", sans-serif; white-space: nowrap; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+.sb { position: absolute; top: 300px; max-width: 760px; padding: 26px 38px; border-radius: 40px; background: #fff; color: #1b1b22;
+  font: 900 64px/1.1 "Inter", sans-serif; opacity: 0; box-shadow: 0 12px 0 rgba(0,0,0,.25); white-space: nowrap; }
+.sb::after { content: ""; position: absolute; bottom: -34px; width: 0; height: 0; border: 22px solid transparent; border-top: 22px solid #fff; border-bottom: 0; border-top-width: 36px; }
+.sb.l { left: 70px; } .sb.l::after { left: 70px; }
+.sb.r { right: 70px; } .sb.r::after { right: 70px; }
+.sb.c { left: 50%; } .sb.c::after { left: calc(50% - 22px); }
+.sb.red { background: #e63946; color: #fff; } .sb.red::after { border-top-color: #e63946; }
+.sb small { display: block; font: 800 30px "Inter", sans-serif; opacity: .55; margin-bottom: 6px; }
+.cap .hk { color: #ffd23f; }
+.cap { font-style: italic; }
+.sb.wrap { white-space: normal; width: 760px; text-align: center; font-size: 56px; }
+.pill-time { position: absolute; left: 50%; top: 300px; transform: translateX(-50%); opacity: 0; padding: 14px 30px; border-radius: 30px;
+  background: #ffd23f; color: #1a1400; font: 900 46px "Inter", sans-serif; white-space: nowrap; }

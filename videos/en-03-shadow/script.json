@@ -1,0 +1,20 @@
+{
+  "voice": "am_michael",
+  "speed": 1.08,
+  "lead_in": 0.2,
+  "tail": 1.6,
+  "segments": [
+    {"id": "hook",    "text": "In this town, your shadow lives one day ahead of you.", "pause": 0.3},
+    {"id": "rule",    "text": "Whatever it does today, you'll do tomorrow. So nobody here steals. If your shadow grabs a wallet tonight, the police are waiting for you in the morning.", "pause": 0.35},
+    {"id": "mayor",   "text": "Mayor Hale loves that. He put a streetlight on every corner. A town in the light, he says, is a town without secrets.", "pause": 0.25},
+    {"id": "clues",   "text": "He always stands right under a lamp. He always wears his big hat. And he never comes outside at sunset.", "pause": 0.35},
+    {"id": "fest",    "text": "Then, at the summer festival, it happened. Every shadow in the square turned around, and ran toward the town gate. Hundreds of them. But not one person moved.", "pause": 0.3},
+    {"id": "panic",   "text": "Tomorrow, the whole town was going to run. Nobody knew why.", "pause": 0.3},
+    {"id": "flood",   "text": "Mayor Hale stayed calm. More light, he said. He built a giant floodlight on the clock tower. Bright enough that nobody will ever see tomorrow coming.", "pause": 0.3},
+    {"id": "tower",   "text": "Tonight, he asked me to help him switch it on. The sun was going down behind him, and for the first time in my life, I saw his shadow.", "pause": 0.35},
+    {"id": "reveal",  "text": "It was already standing outside the gate. Holding a suitcase full of the town's money. Waving goodbye.", "pause": 0.3},
+    {"id": "after",   "text": "The shadows weren't running from something. They were running after him.", "pause": 0.35},
+    {"id": "mine",    "text": "Then I looked for my own shadow. It wasn't running after him. It was standing right next to his, holding the other handle of the suitcase.", "pause": 0.5},
+    {"id": "cta",     "text": "Would you tell the town, or go with him?", "pause": 0.1}
+  ]
+}
