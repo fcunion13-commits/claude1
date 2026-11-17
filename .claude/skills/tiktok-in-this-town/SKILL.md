@@ -73,3 +73,10 @@ Rules from this:
 3. **No list or montage middles.** Every beat must raise the stakes or add a clue. Target 45–60 s.
 4. **Stakes and main characters introduced by about 15 s.** First twist hint by about 50 % of the runtime.
 5. A small on-screen "Wait for the ending 👀" pill around 3–6 s, plus the end question and follow card.
+
+## Detail & staging rules (after "The Visit" feedback)
+- **Scenes must never look empty.** Use the props in `lib3d.js`: `pine`, `car`, `streetlamp`, `fence`, `mailbox`, `snowman`, `bench`, `chimneySmoke` (call the returned update every frame), `townsfolk` (background people walking or talking; keep their paths away from camera paths), `decorateLivingRoom` (fireplace, rug, couch, shelf, frames, plant, lamp, counter, curtains).
+- **Sitting at a table:** add a `chair()` at each seat, place the character on the chair (not inside the table footprint) and call `sitOn(ch, .5)` after `pose()`. Keep the table narrow (about 1.7 m) so both ends fit in portrait framing.
+- True reflections: `Reflector` (three/examples) for mirrors/ice; put "invisible to reflection" characters on layer 1 (`cam.layers.enable(1)`).
+- Keep trees and houses off the camera paths, and check every shot in the contact sheet.
+- Do not commit MP4s over ~50 MB (GitHub limit); send them to the user directly and add them to `.gitignore`.
