@@ -1,0 +1,21 @@
+{
+  "voice": "am_michael",
+  "speed": 1.08,
+  "lead_in": 0.2,
+  "tail": 1.6,
+  "segments": [
+    {"id": "hook",    "text": "In this town, your body count floats above your head. Mine is zero. My grandma's is forty-seven.", "pause": 0.35},
+    {"id": "rule",    "text": "Nobody really knows what it counts. The kids at school make jokes about it. The grown-ups never do. They just say: pray yours stays at zero.", "pause": 0.3},
+    {"id": "gma",     "text": "Grandma Rose is the sweetest person in town. She knits sweaters for everyone, and she bakes a cherry pie for every new neighbor.", "pause": 0.25},
+    {"id": "clue1",   "text": "Funny thing is, the new neighbors never stay long. They always move away in the middle of the night. No goodbye.", "pause": 0.25},
+    {"id": "clue2",   "text": "And Grandma's garden is always freshly dug. Even in winter.", "pause": 0.35},
+    {"id": "max",     "text": "Last week, the Parkers moved in next door. Their son Max was my age. We became best friends in one afternoon.", "pause": 0.25},
+    {"id": "pie",     "text": "That evening, Grandma brought them a cherry pie.", "pause": 0.4},
+    {"id": "gone",    "text": "The next morning, their house was empty. Moved away, Grandma said. And above her head, the number said forty-eight.", "pause": 0.35},
+    {"id": "know",    "text": "That's when I finally understood what it counts.", "pause": 0.4},
+    {"id": "tonight", "text": "Tonight, Grandma made another cherry pie. She put a big slice in front of me and smiled.", "pause": 0.2},
+    {"id": "eat",     "text": "Eat up, sweetheart.", "voice": "bf_emma", "speed": 0.92, "pause": 0.4},
+    {"id": "flicker", "text": "I looked at her number. Forty-eight. Then it started to flicker.", "pause": 0.6},
+    {"id": "cta",     "text": "Would you eat the pie?", "pause": 0.1}
+  ]
+}
