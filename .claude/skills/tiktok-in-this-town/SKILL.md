@@ -66,6 +66,7 @@ Framing tips:
 |---|---|---|---|---|---|
 | The Number (77 s) | 2.9K / 4 h | 27.3 % | 5.0 % | 1 / 5 | visible rule (number over head) = mystery the whole time |
 | Except me (57 s) | 891 / 12 h | 9.8 % | 8.8 % | 0 / 0 | invisible rule, montage middle (17–31 s), stakes only from 32 s, twist at 46 s |
+| The Visit (139 s) | 1.5K / 30 h | 6.0 % (avg 34 s) | 7.7 % | 2 / 2 | 31 s of rules shown on side characters; heroes appear at 31 s; about 70 % gone by 15–20 s; twist at 1:35 |
 
 Rules from this:
 1. **The rule must be VISIBLE on screen the whole time** (number, shadow, color, object). Invisible rules (lying) lose viewers.
@@ -80,3 +81,9 @@ Rules from this:
 - True reflections: `Reflector` (three/examples) for mirrors/ice; put "invisible to reflection" characters on layer 1 (`cam.layers.enable(1)`).
 - Keep trees and houses off the camera paths, and check every shot in the contact sheet.
 - Do not commit MP4s over ~50 MB (GitHub limit); send them to the user directly and add them to `.gitignore`.
+
+### Hard rules from "The Visit"
+6. **Main character and their personal stakes in the first 5 s** ("Today is my little sister's Visit. I swore she'd never find out."). Never open with side characters.
+7. **Rules ≤ 10–12 s**, demonstrated on the main characters themselves, not a demo family.
+8. **Max ~80 s total.** Tighten long scripts. Twist before ~65 % of the runtime.
+9. **First frame must already show the mystery object** (covered mirror, number, shadow). No establishing wide shot as the opening.
