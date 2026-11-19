@@ -70,6 +70,7 @@ Framing tips:
 | The Number (77 s) | 2.9K / 4 h | 27.3 % | 5.0 % | 1 / 5 | visible rule (number over head) = mystery the whole time |
 | Except me (57 s) | 891 / 12 h | 9.8 % | 8.8 % | 0 / 0 | invisible rule, montage middle (17–31 s), stakes only from 32 s, twist at 46 s |
 | The Visit (139 s) | 1.5K / 30 h | 6.0 % (avg 34 s) | 7.7 % | 2 / 2 | 31 s of rules shown on side characters; heroes appear at 31 s; about 70 % gone by 15–20 s; twist at 1:35 |
+| Body Count (70 s) | 911 / 15 h | 12.1 % (avg 16.7 s) | 4.7 % | 3 / 6 (best follow rate: 6.6 per 1K) | new rules work after the hook (flat curve), but about 60 % gone within 1–3 s: first frame was a smiling boy with a "0", the scary "47" only at 4 s |
 
 Rules from this:
 1. **The rule must be VISIBLE on screen the whole time** (number, shadow, color, object). Invisible rules (lying) lose viewers.
@@ -95,3 +96,8 @@ Rules from this:
 A test with CC0 Quaternius models, skeletal animation, post-processing (GTAO, outline, bloom, SMAA) and 60 fps lives in `videos/test-upgrade/` (comparison: `vergleich.png`).
 Result: smoother motion, but 15 s took 31 min to render (≈ 2 h+ per video), the faces cannot change expression, and the style moves away from the channel's chibi look.
 **The owner decided to keep the existing tools and look** (lib3d chibi characters, code props, 30 fps, no post-processing). Do not switch unless the owner asks again; the test project is the starting point if they do.
+
+### Hard rules from "Body Count" (the first 2 seconds)
+10. **Frame 1 = the strongest image of the video**, not the chronological start. Show the threat or contrast immediately (e.g. smiling grandma + pie + glowing "47", nervous kid with "0" next to her).
+11. **Big on-screen text hook from frame 1** (works without sound), e.g. "Grandma's body count: 47 😳". Keep it 1–2 s, then let the story start.
+12. **Show contrast in one image** (0 next to 47, gray next to orange), not in two consecutive shots.
