@@ -1,0 +1,20 @@
+{
+  "voice": "am_michael",
+  "speed": 1.08,
+  "lead_in": 0.25,
+  "tail": 1.8,
+  "segments": [
+    {"id": "hook",     "text": "In this town, on your tenth birthday, the Animal Saint gives you a companion for life.", "pause": 0.25},
+    {"id": "rule",     "text": "Strong kids get wolves. Brave kids get eagles. Your animal decides your whole future.", "pause": 0.3},
+    {"id": "me",       "text": "On my tenth birthday, I got a turtle. A tiny one. The whole town laughed.", "pause": 0.25},
+    {"id": "care",     "text": "But I didn't care. I named him Pebble. I fed him every morning, and I carried him everywhere.", "pause": 0.3},
+    {"id": "jax",      "text": "Then came Jax's birthday. The Saint raised his staff, and the sky turned red. Jax got a dragon.", "pause": 0.3},
+    {"id": "hype",     "text": "Everyone called him the next great hero. And Mia, the girl I had liked forever, started holding his hand.", "pause": 0.35},
+    {"id": "train",    "text": "So I trained. Every single day. Pebble and me, in the rain, in the snow, until the sun went down.", "pause": 0.3},
+    {"id": "tourney",  "text": "Then came the Grand Tournament. Every kid, every animal, one champion.", "pause": 0.25},
+    {"id": "climb",    "text": "Jax and his dragon burned through every round. And somehow, Pebble and I kept winning too.", "pause": 0.3},
+    {"id": "final",    "text": "Now it's the final. A turtle, against a dragon. The whole town is watching.", "pause": 0.3},
+    {"id": "moment",   "text": "Jax smiled. His dragon opened its mouth. And Pebble started to glow.", "pause": 0.6},
+    {"id": "cta",      "text": "Who do you think wins?", "pause": 0.1}
+  ]
+}
