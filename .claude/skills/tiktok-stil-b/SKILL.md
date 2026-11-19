@@ -3,6 +3,9 @@ name: tiktok-stil-b
 description: Erstellt ein deutsches TikTok-Erklärvideo (9:16) im „Stil B“ – dunkle Datensimulation mit zwei farbigen Seiten, Zähler-HUD, Pills, Endstand-Panel und 1–3-Wort-Untertiteln – komplett im Code mit HyperFrames (HTML + GSAP → MP4) und deutschem Piper-Voiceover. Verwenden, wenn der Nutzer ein neues Video, eine neue Folge oder ein Thema für seinen TikTok-Kanal möchte.
 ---
 
+
+> **Erster Schritt in jeder neuen Sitzung / First step in every new session:** `bash scripts/setup-video-tools.sh` (installs HyperFrames, Remotion, FFmpeg, faster-whisper, yt-dlp, three, esbuild, gsap, Piper/Kokoro voices into /tmp/hf, about 2–5 min on a fresh container).
+
 # TikTok-Video im Stil B (deutsch, HyperFrames)
 
 > **Hinweis:** Das aktuelle Hauptformat ist jetzt `tiktok-kartenkampf`. Stil B nur noch verwenden, wenn der Nutzer es ausdrücklich möchte.

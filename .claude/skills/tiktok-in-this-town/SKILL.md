@@ -3,6 +3,9 @@ name: tiktok-in-this-town
 description: Creates an ENGLISH "In this town / In this world…" story TikTok (9:16, 60–90 s) – a strange rule, a character everyone misjudges, a time jump and a twist ending – fully in code with HyperFrames + Three.js (original blocky chibi 3D characters), Kokoro English voiceover and word-exact 1–2-word captions. Use for every video in the English story niche.
 ---
 
+
+> **Erster Schritt in jeder neuen Sitzung / First step in every new session:** `bash scripts/setup-video-tools.sh` (installs HyperFrames, Remotion, FFmpeg, faster-whisper, yt-dlp, three, esbuild, gsap, Piper/Kokoro voices into /tmp/hf, about 2–5 min on a fresh container).
+
 # "In this town" story videos (English, HyperFrames + Three.js)
 
 This niche is **always in English**. First finished example: `videos/en-01-the-number/` (read `src/scene.js` before building a new one).

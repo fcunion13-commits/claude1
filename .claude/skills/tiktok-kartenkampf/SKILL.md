@@ -3,6 +3,9 @@ name: tiktok-kartenkampf
 description: Erstellt ein deutsches Mitmach-TikTok (9:16) im Kartenkampf-Format – Deutschlandkarte aufgeteilt in Vereinsgebiete, Kommentare = Truppen, Folgen zählt doppelt, Gebiete werden erobert, am Ende ein Sieger – komplett im Code mit HyperFrames (HTML/SVG + GSAP → MP4) und deutschem Piper-Voiceover. Das ist das AKTUELLE Hauptformat des Kanals; für neue Videos, Runden-Updates oder Spieltage verwenden.
 ---
 
+
+> **Erster Schritt in jeder neuen Sitzung / First step in every new session:** `bash scripts/setup-video-tools.sh` (installs HyperFrames, Remotion, FFmpeg, faster-whisper, yt-dlp, three, esbuild, gsap, Piper/Kokoro voices into /tmp/hf, about 2–5 min on a fresh container).
+
 # Kartenkampf-Video (deutsch, HyperFrames)
 
 Das ist das **aktuelle Hauptformat** des Kanals. Stil B (Datensimulation) läuft schlechter und kommt nur noch auf ausdrücklichen Wunsch.
