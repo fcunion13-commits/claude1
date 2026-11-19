@@ -90,3 +90,8 @@ Rules from this:
 7. **Rules ≤ 10–12 s**, demonstrated on the main characters themselves, not a demo family.
 8. **Max ~80 s total.** Tighten long scripts. Twist before ~65 % of the runtime.
 9. **First frame must already show the mystery object** (covered mirror, number, shadow). No establishing wide shot as the opening.
+
+## Decision: stay with the current toolset (Nov 2026)
+A test with CC0 Quaternius models, skeletal animation, post-processing (GTAO, outline, bloom, SMAA) and 60 fps lives in `videos/test-upgrade/` (comparison: `vergleich.png`).
+Result: smoother motion, but 15 s took 31 min to render (≈ 2 h+ per video), the faces cannot change expression, and the style moves away from the channel's chibi look.
+**The owner decided to keep the existing tools and look** (lib3d chibi characters, code props, 30 fps, no post-processing). Do not switch unless the owner asks again; the test project is the starting point if they do.
