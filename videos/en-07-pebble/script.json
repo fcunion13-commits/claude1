@@ -1,0 +1,15 @@
+{"voice":"am_michael","speed":1.1,"lead_in":0.0,"tail":1.6,"segments":[
+ {"id":"hook","text":"The dragon's fire didn't even scratch my turtle.","pause":0.25},
+ {"id":"loop","text":"A year ago, the whole town laughed at him.","pause":0.3},
+ {"id":"rule","text":"In this town, every kid gets an animal on their tenth birthday. And a number appears above it. Its power.","pause":0.25},
+ {"id":"me","text":"Wolves get seventy. Eagles get eighty. My tiny turtle got... a one.","pause":0.3},
+ {"id":"jax","text":"Jax got a dragon. Ninety-nine. That same day, Mia picked him.","pause":0.3},
+ {"id":"train","text":"So I trained. Every morning. Push-ups with Pebble on my back.","pause":0.1},
+ {"id":"huss1","text":"Huss! Huss! Huss! Huss!","say":"Hush, hush, hush, hush!","speed":1.25,"pause":0.15},
+ {"id":"rocks","text":"Pushing rocks.","pause":0.05},
+ {"id":"huss2","text":"Huss! Huss! Huss!","say":"Hush, hush, hush!","speed":1.3,"pause":0.3},
+ {"id":"bread","text":"I shared my last piece of bread with him. The number stayed one.","pause":0.35},
+ {"id":"final","text":"Then, the tournament final. Me against Jax. His dragon opened its mouth,","pause":0.35},
+ {"id":"twist","text":"the fire hit Pebble, and the number started climbing. Ten. Five hundred. Nine thousand. Then it broke.","pause":0.4},
+ {"id":"saint","text":"The Saint smiled. The number never showed their power. It showed how much they were loved.","pause":0.35},
+ {"id":"cta","text":"Would you share your last bread?","pause":0.1}]}

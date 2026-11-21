@@ -109,3 +109,14 @@ Result: smoother motion, but 15 s took 31 min to render (≈ 2 h+ per video), th
 15. **No "Part 1" videos without a payoff.** Every video resolves its own twist; a series continues with a new mystery, never a cut-off ending. No "PART 1" pill.
 16. **Voice starts at 0.0 s** (`lead_in: 0`), and the first spoken words are the strongest line.
 17. Keep the formula: **visible rule + misjudged hero + twist**. A plain underdog story with an obvious ending does not hold.
+
+## Look v2 (standard from Nov 2026, after studying two top creators)
+Use `scripts/look2.js` and `scripts/creatures.js` on top of `lib3d.js` (example: `videos/en-07-pebble/`, test: `videos/test-look-v2/`).
+- `dress(ch)` gives clothes knit/denim textures with stitched seams. Create characters with `bold: true` for thick, readable eyebrows.
+- Surfaces: `texMat(sandTex()|woodTex()|stoneTex()|scaleTex(), [rx, ry])`; never plain single-colour floors or walls.
+- Light: `cineLights(scene, {...})` gives a warm key and a cool rim. Post: `makePost(renderer, scene, cam)`, then `post.render(scene, focus, aperture)` per shot (bloom + depth of field). Close-ups use aperture .004–.006; wide shots use .0012–.002.
+- Effects: `fireStream`, `sparkBurst`, `shieldDome`, `glowSprite`. Keep additive sprites small and low opacity, or bloom washes the frame white.
+- Dense sets: `stringLights`, `bunting`, packed crowds (`castShadow = false` on crowd), confetti.
+- Camera: characters fill a third to half of the frame, a cut every 1–2 s, and `shake(cam, t, amt)` on impacts. HTML overlays `#speed` (speed lines), `#vig`, `#flash`.
+- **"HUSS!" meme moment:** a fast grind sequence (training, working) where the narrator chants "Huss, huss, huss!" (script `text` "Huss!", `say` "Hush, hush, hush!", speed 1.25–1.3). Add one hard cut plus a big tilted yellow `HUSS!` text pop, a flash, speed lines and shake per word. Optionally end with a tiny cute "huss!" from a side character.
+- Cost: about 56 s of render time per second of video (~50 min for 50 s). Render in the background.
