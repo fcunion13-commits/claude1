@@ -71,6 +71,7 @@ Framing tips:
 | Except me (57 s) | 891 / 12 h | 9.8 % | 8.8 % | 0 / 0 | invisible rule, montage middle (17–31 s), stakes only from 32 s, twist at 46 s |
 | The Visit (139 s) | 1.5K / 30 h | 6.0 % (avg 34 s) | 7.7 % | 2 / 2 | 31 s of rules shown on side characters; heroes appear at 31 s; about 70 % gone by 15–20 s; twist at 1:35 |
 | Body Count (70 s) | 911 / 15 h | 12.1 % (avg 16.7 s) | 4.7 % | 3 / 6 (best follow rate: 6.6 per 1K) | new rules work after the hook (flat curve), but about 60 % gone within 1–3 s: first frame was a smiling boy with a "0", the scary "47" only at 4 s |
+| Pebble P1 (74 s) | 860 / 48 h (died after day 1) | 2.2 % (avg 8.1 s) | 1.6 % | 0 / 0 | below 50 % within ~1 s, then flat: back of a turtle shell + static "🐢 VS 🐉" text, no face, no action, "PART 1" pill; underdog story without a visible rule or twist, montage middle |
 
 Rules from this:
 1. **The rule must be VISIBLE on screen the whole time** (number, shadow, color, object). Invisible rules (lying) lose viewers.
@@ -101,3 +102,10 @@ Result: smoother motion, but 15 s took 31 min to render (≈ 2 h+ per video), th
 10. **Frame 1 = the strongest image of the video**, not the chronological start. Show the threat or contrast immediately (e.g. smiling grandma + pie + glowing "47", nervous kid with "0" next to her).
 11. **Big on-screen text hook from frame 1** (works without sound), e.g. "Grandma's body count: 47 😳". Keep it 1–2 s, then let the story start.
 12. **Show contrast in one image** (0 next to 47, gray next to orange), not in two consecutive shots.
+
+### Hard rules from "Pebble Part 1"
+13. **Frame 1 needs a face with emotion AND something already happening** (fire hitting, number glowing, someone screaming). A static object seen from behind (shell, back of a head) loses viewers in the first second.
+14. **The text hook must be a curiosity gap or claim**, not a neutral label. Use "The dragon's fire didn't even scratch him", not "🐢 VS 🐉".
+15. **No "Part 1" videos without a payoff.** Every video resolves its own twist; a series continues with a new mystery, never a cut-off ending. No "PART 1" pill.
+16. **Voice starts at 0.0 s** (`lead_in: 0`), and the first spoken words are the strongest line.
+17. Keep the formula: **visible rule + misjudged hero + twist**. A plain underdog story with an obvious ending does not hold.
