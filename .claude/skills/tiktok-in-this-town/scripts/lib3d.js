@@ -70,10 +70,10 @@ export function faceTex(expr = "smile", opt = {}) {
         g.fillStyle = "#ffffff"; g.beginPath(); g.arc(x + 8, ey - 6, 6, 0, 7); g.fill();
       }
       // brows
-      g.strokeStyle = opt.brow || "#3a2a20"; g.lineWidth = 7; g.lineCap = "round"; g.beginPath();
-      const by = ey - 42;
-      if (expr === "sad") { g.moveTo(x - 16, by + s * -6 + 6); g.lineTo(x + 16, by + s * 6 + 6); }
-      else if (expr === "angry") { g.moveTo(x - 16, by + s * 8); g.lineTo(x + 16, by - s * 8); }
+      g.strokeStyle = opt.brow || "#3a2a20"; g.lineWidth = opt.bold ? 15 : 7; g.lineCap = "round"; g.beginPath();
+      const by = ey - 42, bk = opt.bold ? 1.8 : 1;
+      if (expr === "sad") { g.moveTo(x - 16, by + s * -6 * bk + 6); g.lineTo(x + 16, by + s * 6 * bk + 6); }
+      else if (expr === "angry") { g.moveTo(x - 18, by + s * 8 * bk + 4); g.lineTo(x + 18, by - s * 8 * bk + 4); }
       else if (expr === "shock") { g.moveTo(x - 16, by - 10); g.quadraticCurveTo(x, by - 20, x + 16, by - 10); }
       else { g.moveTo(x - 15, by); g.quadraticCurveTo(x, by - 6, x + 15, by); }
       g.stroke();

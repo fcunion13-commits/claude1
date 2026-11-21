@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="assets/gsap.min.js"></script>
+<link rel="stylesheet" href="assets/story.css" />
+<style>
+#speed { position:absolute; inset:0; opacity:0; pointer-events:none;
+  background: repeating-conic-gradient(from 0deg at 50% 45%, rgba(255,255,255,0) 0deg 5deg, rgba(255,255,255,.55) 5deg 5.5deg);
+  -webkit-mask-image: radial-gradient(circle at 50% 45%, transparent 0 38%, #000 70%); mask-image: radial-gradient(circle at 50% 45%, transparent 0 38%, #000 70%); }
+#vig { position:absolute; inset:0; pointer-events:none; background: radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 55%, rgba(10,5,20,.55) 100%); }
+#flash { position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; }
+#hook { position:absolute; left:50px; right:50px; top:210px; text-align:center; opacity:0; font:900 92px/1.05 "Inter",sans-serif; color:#fff;
+  -webkit-text-stroke: 14px #000; paint-order: stroke fill; text-shadow: 0 8px 0 rgba(0,0,0,.4); }
+#hook span { color:#ffd23f; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="5" data-width="1080" data-height="1920">
+  <canvas id="gl" width="1080" height="1920"></canvas>
+  <div id="speed"></div><div id="vig"></div><div id="flash"></div>
+  <div id="hook">The dragon's fire didn't even <span>scratch</span> him 😳</div>
+</div>
+<script src="assets/scene.js"></script>
+</body>
+</html>
