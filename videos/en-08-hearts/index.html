@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080, height=1920" />
+<script src="assets/gsap.min.js"></script>
+<script src="timings.js"></script>
+<link rel="stylesheet" href="assets/story.css" />
+<style>
+#rv { position:absolute; inset:0; width:1080px; height:1920px; object-fit:cover; transform:scale(1.05); transform-origin:50% 55%; }
+#speed { position:absolute; inset:0; opacity:0; pointer-events:none; background: repeating-conic-gradient(from 0deg at 50% 45%, rgba(255,255,255,0) 0deg 5deg, rgba(255,255,255,.55) 5deg 5.5deg);
+  -webkit-mask-image: radial-gradient(circle at 50% 45%, transparent 0 38%, #000 70%); }
+#vig { position:absolute; inset:0; pointer-events:none; background: radial-gradient(ellipse at 50% 45%, rgba(0,0,0,0) 58%, rgba(10,5,20,.45) 100%); }
+#flash { position:absolute; inset:0; background:#fff; opacity:0; pointer-events:none; }
+.hook { position:absolute; left:40px; right:40px; top:200px; text-align:center; opacity:0; font:900 76px/1.1 "Inter",sans-serif; color:#fff; white-space:nowrap; -webkit-text-stroke: 14px #000; paint-order: stroke fill; text-shadow: 0 8px 0 rgba(0,0,0,.4); }
+.hook .g { color:#b8c2cc; } .hook .r { color:#ff4d6d; }
+.huss { position:absolute; left:0; right:0; top:760px; text-align:center; opacity:0; font:900 210px/1 "Inter",sans-serif; color:#ffd23f; font-style:italic; -webkit-text-stroke: 22px #000; paint-order: stroke fill; text-shadow: 0 14px 0 rgba(0,0,0,.45); }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="main" data-start="0" data-duration="49.263" data-width="1080" data-height="1920" data-sync-total>
+  <video id="rv" class="clip" src="assets/roblox.mp4" data-start="0" data-duration="49.263" muted playsinline data-sync-total></video>
+  <div id="speed"></div><div id="vig"></div><div id="flash"></div>
+  <div id="caps"></div>
+  <div id="hook" class="hook">Mayor: <span class="g">0</span> ❤️<br>Street sweeper: <span class="r">412</span> ❤️ 😳</div>
+  <div id="q" class="endq">Who would stand<br><span>behind YOU?</span> 👇</div>
+  <div id="follow" class="follow">Follow for the next town 🏘️</div>
+  <audio id="music" class="clip" src="assets/music.wav" data-start="0" data-duration="49.263" data-volume="0.22" data-fade-out="2" data-sync-total></audio>
+  <audio id="vo" class="clip" src="assets/voice.wav" data-start="0" data-duration="49.263" data-volume="1" data-sync-total></audio>
+</div>
+<script>
+const S = window.SEG, WORDS = window.WORDS, CAPS = window.CAPS;
+const norm = w => w.toLowerCase().replace(/[^a-z0-9]/g, "");
+const KEY = new Set(["hearts","zero","four","hundred","twelve","mayor","ben","cheater","festival","window","bread","orphanage","forty","years","fraud","baker","orphans","whole","town","heart","bens","you"]);
+const tl = gsap.timeline({ paused: true }); const capsEl = document.getElementById("caps"), root = document.getElementById("root");
+const H = ["huss1","huss2","huss3"]; const inH = x => H.some(h => x >= S[h].start - .1 && x <= S[h].end + .1);
+let prev = null;
+CAPS.forEach(c => { if (inH(c.t0) || c.t0 < 2.6) return; const d = document.createElement("div"); d.className = "cap";
+  d.innerHTML = c.text.split(" ").map(w => KEY.has(norm(w)) ? '<span class="hk">' + w + '</span>' : w).join(" "); capsEl.appendChild(d);
+  tl.set(d, { opacity: 0 }, 0); tl.fromTo(d, { opacity: 1, scale: .86 }, { opacity: 1, scale: 1, duration: .1, ease: "back.out(3)", immediateRender: false }, c.t0); tl.set(d, { opacity: 0 }, c.t1);
+  if (prev) tl.set(prev, { opacity: 0 }, c.t0); prev = d; });
+const hw = WORDS.filter(w => inH(w.t0) && norm(w.w) === "huss");
+hw.forEach((w, i) => { const d = document.createElement("div"); d.className = "huss"; d.textContent = "HUSS!"; root.appendChild(d); const r = [-6,5,-3,7,-5,4,-2,6][i % 8];
+  tl.fromTo(d, { opacity: 1, scale: 1.7, rotation: r }, { opacity: 1, scale: 1, rotation: r, duration: .12, ease: "back.out(3)", immediateRender: false }, w.t0); tl.set(d, { opacity: 0 }, w.t0 + .22);
+  tl.fromTo("#flash", { opacity: .35 }, { opacity: 0, duration: .12, immediateRender: false }, w.t0); tl.fromTo("#speed", { opacity: .8 }, { opacity: 0, duration: .25, immediateRender: false }, w.t0); });
+tl.fromTo("#hook", { opacity: 0, scale: 1.4 }, { opacity: 1, scale: 1, duration: .2, ease: "back.out(2.5)", immediateRender: false }, 0); tl.set("#hook", { opacity: 0 }, 2.6);
+const tHeart = (WORDS.find(w => w.t0 > S.twist.start && norm(w.w) === "heart") || {t0: 44}).t0;
+tl.fromTo("#flash", { opacity: .4 }, { opacity: 0, duration: .3, immediateRender: false }, tHeart);
+tl.fromTo("#q", { opacity: 0, scale: .7 }, { opacity: 1, scale: 1, duration: .3, ease: "back.out(2.5)", immediateRender: false }, S.cta.start);
+tl.fromTo("#follow", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: .3, ease: "back.out(2)", immediateRender: false }, S.cta.end + .2);
+tl.to({}, { duration: window.TOTAL }, 0);
+window.__timelines = window.__timelines || {}; window.__timelines["main"] = tl;
+</script>
+</body>
+</html>
