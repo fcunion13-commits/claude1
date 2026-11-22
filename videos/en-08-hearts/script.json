@@ -1,0 +1,17 @@
+{"voice":"am_michael","speed":1.1,"lead_in":0.0,"tail":1.6,"segments":[
+ {"id":"hook","text":"In this town, hearts float above your head. One for every person who truly loves you.","pause":0.25},
+ {"id":"contrast","text":"Our mayor has zero. The man who sweeps our streets has four hundred and twelve.","pause":0.3},
+ {"id":"loop","text":"Nobody knew why. Until the night I followed him.","pause":0.3},
+ {"id":"stakes","text":"The mayor called Old Ben a cheater, and wanted him gone before the festival.","pause":0.25},
+ {"id":"follow","text":"So at four AM, I followed Ben.","pause":0.1},
+ {"id":"huss1","text":"Huss! Huss! Huss!","say":"Hush, hush, hush!","speed":1.25,"pause":0.05},
+ {"id":"window","text":"He fixed Mrs. Lee's broken window.","pause":0.05},
+ {"id":"huss2","text":"Huss! Huss!","say":"Hush, hush!","speed":1.25,"pause":0.05},
+ {"id":"bread","text":"Left bread at the orphanage door.","pause":0.05},
+ {"id":"huss3","text":"Huss! Huss! Huss!","say":"Hush, hush, hush!","speed":1.3,"pause":0.1},
+ {"id":"years","text":"Every night. For forty years. And he never told anyone.","pause":0.35},
+ {"id":"festival","text":"At the festival, the mayor pointed at Ben.","pause":0.1},
+ {"id":"fraud","text":"This man is a fraud.","voice":"bm_george","speed":1.0,"pause":0.3},
+ {"id":"payoff","text":"Then Mrs. Lee stood up. Then the baker. Then the orphans. One by one, the whole town stood behind Ben.","pause":0.35},
+ {"id":"twist","text":"And above the mayor's head, for the first time, one heart appeared. Ben's.","pause":0.35},
+ {"id":"cta","text":"Who would stand behind you?","pause":0.1}]}
