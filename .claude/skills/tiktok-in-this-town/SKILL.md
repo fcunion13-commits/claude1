@@ -15,6 +15,7 @@ This niche is **always in English**. First finished example: `videos/en-01-the-n
 - **Own stories only.** The reference creator's stories, such as the future-photo story, are not retold or lightly reworded. Invent a new strange rule every time.
 
 ## Story formula (≈ 180–230 words → 65–80 s)
+**Owner rule: every script MUST start with the words "In this town" (first spoken words of the hook).** The first frame still shows the strongest image and the on-screen text hook (rules 10–11); only the voice starts with "In this town…".
 1. **Hook (1 sentence):** "In this town, every [person] [strange rule]."
 2. **Rule examples:** 2–3 quick concrete cases, including one "normal" and one exciting.
 3. **The character:** "But one day, a [boy/girl] named X …". Their result breaks the rule's expectations.
